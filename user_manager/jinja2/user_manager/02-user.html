@@ -1,0 +1,87 @@
+{% extends 'user_manager/partials/base.html' %}
+{% macro form_input(label, value, readonly=False) %}
+<div class="form-group row">
+    <label class="col-2 col-form-label">{{ label }}</label>
+    <div class="col-10">
+        <input class="form-control" type="text" :value="{{ value }}"{% if readonly %} readonly{% endif %}>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro form_input_readonly(label, value) %}
+    {{ form_input(label, value, readonly=True) }}
+{% endmacro %}
+
+{% block main %}
+    <div id="main-app">
+        <template v-if="user">
+            {{ form_input_readonly('Username', 'user.username') }}
+            {{ form_input_readonly('Email', 'user.email') }}
+            {{ form_input('First name', 'getFirstName(user)') }}
+            {{ form_input('Last name', 'getLastName(user)') }}
+
+            <div class="row">
+                <div class="col-5">
+                    <ul class="list">
+                        <li v-for="app in notSelectedApps">[[ app.app_name ]]</li>
+                    </ul>
+                </div>
+                <div class="col-2"></div>
+                <div class="col-5">
+                    <ul>
+                        <li v-for="app in selectedApps">[[ app.app_name ]]</li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+    </div>
+{% endblock %}
+
+{% block bottom %}
+    <script>
+    new Vue({
+        el: '#main-app',
+        data: {
+            user: null,
+            userApps: {},
+            apps: {{ apps|tojson }}
+        },
+        mounted: function() {
+            var users = {{ data }};
+
+            if (users.length > 0) {
+                this.user = users[0];
+                if (this.user.hasOwnProperty('app_metadata') && this.user.app_metadata.hasOwnProperty('permissions')) {
+                    this.user.app_metadata.permissions.forEach(function (item) {
+                        this.userApps[item.app] = true;
+                    }, this);
+                }
+            }
+        },
+        computed: {
+            notSelectedApps: function () {
+                return this.apps.filter(function (app) {
+                    return !this.userApps.hasOwnProperty(app.app_id)
+                }, this)
+            },
+            selectedApps: function () {
+                return this.apps.filter(function (app) {
+                    return this.userApps.hasOwnProperty(app.app_id)
+                }, this)
+            },
+        },
+        methods: {
+            getFirstName: function (user) {
+                if (user.hasOwnProperty('user_metadata')) {
+                    return user.user_metadata.first_name || '';
+                }
+            },
+            getLastName: function (user) {
+                if (user.hasOwnProperty('user_metadata')) {
+                    return user.user_metadata.last_name || '';
+                }
+            },
+        }
+    })
+    </script>
+{% endblock %}

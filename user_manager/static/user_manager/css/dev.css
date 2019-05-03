@@ -1,0 +1,26 @@
+main {
+    max-width: 1000px;
+    margin: 1em auto 0;
+}
+
+.grid {
+    display: grid;
+}
+
+.flex {
+    display: flex;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table td, .table tr, .table th {
+    border: solid 1px #dedede;
+    padding: 1em 1em 1em 1em;
+}
