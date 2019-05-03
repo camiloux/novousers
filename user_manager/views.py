@@ -1,3 +1,4 @@
+from django.db.models import Value, BooleanField
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -23,6 +24,6 @@ class ViewUser(View):
             data = get_user_by_username(username)
             return render(request, 'user_manager/02-user.html', {
                 'data': mark_safe(data),
-                'apps': list(App.objects.values())
+                'apps': list(App.objects.annotate(selected=Value(False, output_field=BooleanField())).values())
             })
         return redirect('user_manager:index')

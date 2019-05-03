@@ -24,3 +24,8 @@ main {
     border: solid 1px #dedede;
     padding: 1em 1em 1em 1em;
 }
+
+.list-selection {
+    border: #dedede solid 1px;
+    padding: 1em;
+}
