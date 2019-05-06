@@ -8,7 +8,8 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View
 
-from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, patch_user
+from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, patch_user, \
+    delete_user
 from user_manager.utils import get_apps_list
 
 
@@ -43,6 +44,13 @@ class ViewUser(View):
 
         result = patch_user(json.dumps(json_data), user_id)
         return redirect(request.path)
+
+
+class DeleteUser(View):
+    def post(self, request):
+        user_id = request.POST.get('user_id')
+        result = delete_user(user_id)
+        return redirect('user_manager:index')
 
 
 class CreateUser(View):

@@ -61,3 +61,7 @@ def create_user(data):
 
 def patch_user(data, user_id):
     return auth_request('PATCH', f'/api/v2/users/{user_id}', payload=data)
+
+
+def delete_user(user_id):
+    return auth_request('DELETE', f'/api/v2/users/{user_id}')

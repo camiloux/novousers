@@ -42,8 +42,9 @@
                     </div>
                     <div class="col-2 text-center d-flex align-items-center justify-content-center">
                         <div>
-                            <span class="list-action" @click="addApps">&rsaquo;</span><br><span class="list-action"
-                                                                                                @click="removeApps">&lsaquo;</span>
+                            <span class="list-action"
+                                  @click="addApps">&rsaquo;</span><br><span class="list-action"
+                                                                            @click="removeApps">&lsaquo;</span>
                         </div>
                     </div>
                     <div class="col-5">
@@ -58,14 +59,19 @@
                 </div>
                 <input type="hidden" name="user_data" :value="userJson">
                 {{ csrf_input }}
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" type="submit">
                     {% if creating %}Crear usuario{% else %}Actualizar usuario{% endif %}
                 </button>
                 {% if not creating %}
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" type="button" @click="confirmDeleteUser">
                     Eliminar usuario
                 </button>
                 {% endif %}
+            </form>
+
+            <form method="post" ref="deleteUser" action="{{ url('user_manager:delete-user') }}">
+                {{ csrf_input }}
+                <input type="hidden" name="user_id" :value="user.user_id">
             </form>
         </template>
     </div>
@@ -189,6 +195,11 @@
                             this.toggleApp(app);
                         }
                     }, this);
+                },
+                confirmDeleteUser: function () {
+                    if (confirm('¿Desea eliminar este usuario?')) {
+                        this.$refs.deleteUser.submit();
+                    }
                 }
             }
         })
