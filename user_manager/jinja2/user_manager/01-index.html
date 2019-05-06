@@ -15,7 +15,7 @@
                 <td>[[ user.username ]]</td>
                 <td>[[ user.email ]]</td>
                 <td>
-                    <a :href="'{{ url('user_manager:view-user') }}?username=' + user.username">View</a>
+                    <a :href="'{{ url('user_manager:view-user') }}?user_id=' + user.user_id">View</a>
                 </td>
             </tr>
             </tbody>

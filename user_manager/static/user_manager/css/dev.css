@@ -25,7 +25,23 @@ main {
     padding: 1em 1em 1em 1em;
 }
 
+.list-title {
+    padding: 3px;
+    text-align: center;
+}
+
 .list-selection {
     border: #dedede solid 1px;
-    padding: 1em;
+    padding: .5em;
+    min-height: 300px;
+}
+
+.list-selection li {
+    width: 100%;
+    padding: .3em;
+}
+
+.list-selection li.selected {
+    background-color: blue;
+    color: #ffffff;
 }

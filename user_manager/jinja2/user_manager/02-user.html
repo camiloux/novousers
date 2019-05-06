@@ -1,11 +1,11 @@
 {% extends 'user_manager/partials/base.html' %}
 {% macro form_input(label, value, readonly=False) %}
-<div class="form-group row">
-    <label class="col-2 col-form-label">{{ label }}</label>
-    <div class="col-10">
-        <input class="form-control" type="text" :value="{{ value }}"{% if readonly %} readonly{% endif %}>
+    <div class="form-group row">
+        <label class="col-2 col-form-label">{{ label }}</label>
+        <div class="col-10">
+            <input class="form-control" type="text" v-model="{{ value }}"{% if readonly %} readonly{% endif %}>
+        </div>
     </div>
-</div>
 {% endmacro %}
 
 {% macro form_input_readonly(label, value) %}
@@ -15,82 +15,139 @@
 {% block main %}
     <div id="main-app">
         <template v-if="user">
+            {% if creating %}
+            {{ form_input('Username', 'user.username') }}
+            {{ form_input('Email', 'user.email') }}
+            {% else %}
             {{ form_input_readonly('Username', 'user.username') }}
             {{ form_input_readonly('Email', 'user.email') }}
-            {{ form_input('First name', 'getFirstName(user)') }}
-            {{ form_input('Last name', 'getLastName(user)') }}
+            {% endif %}
+            <template v-if="user.user_metadata">
+            {{ form_input('Nombres', 'user.user_metadata.first_name') }}
+            {{ form_input('Apellidos', 'user.user_metadata.last_name') }}
+            </template>
 
             <div class="row">
                 <div class="col-5">
+                    <div class="list-title">Aplicaciones disponibles</div>
                     <ul class="list-selection list-inline">
-                        <li class="list-inline-item" v-for="app in notSelectedApps" :class="{selected: app.selected}" @click="setAppSelected(index)">
-                            [[ app.app_name ]] [[ app.selected ]]
+                        <li class="list-inline-item" v-for="app in notSelectedApps" :class="{selected: app.selected}"
+                            @click="setAppSelected(app, 'l')">
+                            [[ app.app_name ]]
                         </li>
                     </ul>
                 </div>
-                <div class="col-2"></div>
+                <div class="col-2 text-center d-flex align-items-center justify-content-center">
+                    <div>
+                        <span @click="addApps">&rsaquo;</span><br><span @click="removeApps">&lsaquo;</span>
+                    </div>
+                </div>
                 <div class="col-5">
+                    <div class="list-title">Aplicaciones seleccionadas</div>
                     <ul class="list-selection list-inline">
-                        <li class="list-inline-item" v-for="app in selectedApps" :class="{selected: app.selected}" @click="setAppSelected(index)">
-                            [[ app.app_name ]] [[ app.selected ]]
+                        <li class="list-inline-item" v-for="app in selectedApps" :class="{selected: app.selected}"
+                            @click="setAppSelected(app, 'r')">
+                            [[ app.app_name ]]
                         </li>
                     </ul>
                 </div>
             </div>
+            <form method="post">
+                <input type="hidden" name="user_data" :value="userJson">
+                {{ csrf_input }}
+                <button class="btn btn-primary">
+                    {% if creating %}Crear usuario{% else %}Actualizar usuario{% endif %}
+                </button>
+            </form>
         </template>
     </div>
 {% endblock %}
 
 {% block bottom %}
     <script>
-    new Vue({
-        el: '#main-app',
-        data: {
-            user: null,
-            userApps: {},
-            apps: {{ apps|tojson }}
-        },
-        mounted: function() {
-            var users = {{ data }};
+        new Vue({
+            el: '#main-app',
+            data: {
+                user: {{ data }},
+                userApps: {},
+                apps: {{ apps|tojson }}
+            },
+            mounted: function () {
+                if (!this.user.hasOwnProperty('app_metadata')) {
+                    this.$set(this.user, 'app_metadata', {permissions: []})
+                }
+                if (!this.user.app_metadata.hasOwnProperty('permissions')) {
+                    this.$set(this.user.app_metadata, 'permissions', [])
+                }
 
-            if (users.length > 0) {
-                this.user = users[0];
-                if (this.user.hasOwnProperty('app_metadata') && this.user.app_metadata.hasOwnProperty('permissions')) {
-                    this.user.app_metadata.permissions.forEach(function (item) {
-                        this.userApps[item.app] = true;
+                if (!this.user.hasOwnProperty('user_metadata')) {
+                    this.$set(this.user, 'user_metadata', {
+                        first_name: '', last_name: ''
+                    })
+                }
+                if (!this.user.user_metadata.hasOwnProperty('first_name')) {
+                    this.$set(this.user.app_metadata, 'first_name', '')
+                }
+                if (!this.user.user_metadata.hasOwnProperty('last_name')) {
+                    this.$set(this.user.app_metadata, 'last_name', '')
+                }
+
+                var permissions = this.user.app_metadata.permissions;
+                permissions.forEach(function (item) {
+                    this.$set(this.userApps, item.app, true)
+                }, this);
+
+                this.apps.forEach(function (app) {
+                    if (!this.userApps.hasOwnProperty(app.app_id)) {
+                        this.$set(this.userApps, app.app_id, false)
+                    }
+                }, this);
+            },
+            computed: {
+                notSelectedApps: function () {
+                    return this.apps.filter(function (app) {
+                        return !this.userApps[app.app_id]
+                    }, this)
+                },
+                selectedApps: function () {
+                    return this.apps.filter(function (app) {
+                        return this.userApps[app.app_id]
+                    }, this)
+                },
+                userJson: function () {
+                    return JSON.stringify(this.user);
+                }
+            },
+            methods: {
+                setAppSelected: function (app, list) {
+                    app.selected = !app.selected;
+                    if (list === 'l') {
+                        this.selectedApps.forEach(function (app) {
+                            app.selected = false;
+                        });
+                    } else if (list === 'r') {
+                        this.notSelectedApps.forEach(function (app) {
+                            app.selected = false;
+                        })
+                    }
+                },
+                addApps: function () {
+                    this.notSelectedApps.forEach(function (app) {
+                        if (app.selected) {
+                            this.userApps[app.app_id] = true;
+                        }
+                        app.selected = false;
+                    }, this);
+                },
+                removeApps: function () {
+                    this.selectedApps.forEach(function (app) {
+                        if (app.selected) {
+                            this.userApps[app.app_id] = false;
+                        }
+                        app.selected = false;
                     }, this);
                 }
             }
-        },
-        computed: {
-            notSelectedApps: function () {
-                return this.apps.filter(function (app) {
-                    return !this.userApps.hasOwnProperty(app.app_id)
-                }, this)
-            },
-            selectedApps: function () {
-                return this.apps.filter(function (app) {
-                    return this.userApps.hasOwnProperty(app.app_id)
-                }, this)
-            },
-        },
-        methods: {
-            getFirstName: function (user) {
-                if (user.hasOwnProperty('user_metadata')) {
-                    return user.user_metadata.first_name || '';
-                }
-            },
-            getLastName: function (user) {
-                if (user.hasOwnProperty('user_metadata')) {
-                    return user.user_metadata.last_name || '';
-                }
-            },
-            setAppSelected: function(index) {
-                var selectedApp = this.apps[index];
-                selectedApp.selected = !selectedApp.selected;
-                this.$set(this.apps, index, selectedApp);
-            }
-        }
-    })
+        })
     </script>
 {% endblock %}

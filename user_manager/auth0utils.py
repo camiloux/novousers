@@ -42,8 +42,10 @@ def auth_request(method, url, payload=None):
 
 
 def get_all_users():
-    return auth_request('GET', '/api/v2/users?fields=username,email')
+    fields = 'user_id,username,email'
+    return auth_request('GET', f'/api/v2/users?fields={fields}')
 
 
-def get_user_by_username(username):
-    return auth_request('GET', f'/api/v2/users?q=username:{username}')
+def get_user_by_username(user_id):
+    fields = 'user_id,username,email,email_verified,user_metadata,app_metadata'
+    return auth_request('GET', f'/api/v2/users/{user_id}?fields={fields}')
