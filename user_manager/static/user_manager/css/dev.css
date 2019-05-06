@@ -51,3 +51,12 @@ main {
     cursor: pointer;
     font-size: xx-large;
 }
+
+
+.alert-container {
+    position: fixed;
+    z-index: 10;
+    bottom: 5px;
+    right: 15px;
+    min-width: 400px;
+}

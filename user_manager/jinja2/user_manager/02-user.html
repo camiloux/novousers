@@ -8,8 +8,8 @@
     </div>
 {% endmacro %}
 
-{% macro form_input_readonly(label, value, name) %}
-    {{ form_input(label, value, readonly=True) }}
+{% macro form_input_readonly(label, value, name, required=False) %}
+    {{ form_input(label, value, readonly=True, required=required) }}
 {% endmacro %}
 
 {% block main %}
@@ -24,8 +24,8 @@
                     {{ form_input_readonly('Email', 'user.email', 'email') }}
                 {% endif %}
                 <template v-if="user.user_metadata">
-                    {{ form_input('Nombres', 'user.user_metadata.first_name', 'first_name') }}
-                    {{ form_input('Apellidos', 'user.user_metadata.last_name', 'last_name') }}
+                    {{ form_input('Nombres', 'user.user_metadata.first_name', 'first_name', required=False) }}
+                    {{ form_input('Apellidos', 'user.user_metadata.last_name', 'last_name', required=False) }}
                 </template>
 
                 <div class="row">
@@ -67,6 +67,7 @@
                     Eliminar usuario
                 </button>
                 {% endif %}
+                <a href="{{ url('user_manager:index') }}" class="btn btn-outline-primary float-right">Volver</a>
             </form>
 
             <form method="post" ref="deleteUser" action="{{ url('user_manager:delete-user') }}">
@@ -171,7 +172,6 @@
                         this.user.app_metadata.permissions.forEach(function (toRemoveApp, index) {
                             if (toRemoveApp.app === app.app_id) {
                                 this.user.app_metadata.permissions.splice(index, 1);
-                                return;
                             }
                         }, this);
                     } else {
@@ -179,7 +179,6 @@
                             app: app.app_id, role: 'User'
                         });
                     }
-
                 },
                 addApps: function () {
                     this.notSelectedApps.forEach(function (app) {

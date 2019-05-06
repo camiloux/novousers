@@ -42,7 +42,7 @@ def auth_request(method, url, payload=None):
     res = conn.getresponse()
     data = res.read()
 
-    return data.decode('utf-8')
+    return data.decode('utf-8'), res.code
 
 
 def get_all_users():

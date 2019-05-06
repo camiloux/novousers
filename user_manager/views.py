@@ -1,6 +1,7 @@
 import json
 from uuid import uuid4
 
+from django.contrib import messages
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -15,7 +16,7 @@ from user_manager.utils import get_apps_list
 
 class Index(View):
     def get(self, request):
-        users = get_all_users()
+        users, code = get_all_users()
         return render(request, 'user_manager/01-index.html', {
             'users': mark_safe(users)
         })
@@ -25,7 +26,7 @@ class ViewUser(View):
     def get(self, request):
         username = request.GET.get('user_id', None)
         if username:
-            data = get_user_by_username(username)
+            data, code = get_user_by_username(username)
             return render(request, 'user_manager/02-user.html', {
                 'data': mark_safe(data), 'apps': get_apps_list()
             })
@@ -40,16 +41,25 @@ class ViewUser(View):
             del json_data['email']
             del json_data['email_verified']
         except json.decoder.JSONDecodeError:
-            return redirect(request.path)
+            return redirect(f'{request.path}?user_id={user_id}')
 
-        result = patch_user(json.dumps(json_data), user_id)
-        return redirect(request.path)
+        response, status = patch_user(json.dumps(json_data), user_id)
+        if status == 200:
+            messages.add_message(request, messages.SUCCESS, 'Usuario actualizado', extra_tags='alert-success')
+        else:
+            messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
+
+        return redirect(f'{request.path}?user_id={user_id}')
 
 
 class DeleteUser(View):
     def post(self, request):
         user_id = request.POST.get('user_id')
-        result = delete_user(user_id)
+        response, status = delete_user(user_id)
+        if status == 204:
+            messages.add_message(request, messages.SUCCESS, 'Usuario eliminado', extra_tags='alert-success')
+        else:
+            messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
         return redirect('user_manager:index')
 
 
@@ -76,6 +86,10 @@ class CreateUser(View):
             json_data['password'] = str(uuid4())
         except json.decoder.JSONDecodeError:
             return redirect(request.path)
-        result_json = create_user(json.dumps(json_data))
-        result = json.loads(result_json)
+        response, status = create_user(json.dumps(json_data))
+        result = json.loads(response)
+        if status == 201:
+            messages.add_message(request, messages.SUCCESS, 'Usuario creado', extra_tags='alert-success')
+        else:
+            messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
         return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")
