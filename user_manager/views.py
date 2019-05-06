@@ -1,12 +1,14 @@
 import json
+from uuid import uuid4
 
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View
 
-from user_manager.auth0utils import get_all_users, get_user_by_username
+from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, patch_user
 from user_manager.utils import get_apps_list
 
 
@@ -29,7 +31,17 @@ class ViewUser(View):
         return redirect('user_manager:index')
 
     def post(self, request):
-        print(request.POST.get('user_data'))
+        try:
+            json_data = json.loads(request.POST.get('user_data'))
+            user_id = json_data['user_id']
+            del json_data['username']
+            del json_data['user_id']
+            del json_data['email']
+            del json_data['email_verified']
+        except json.decoder.JSONDecodeError:
+            return redirect(request.path)
+
+        result = patch_user(json.dumps(json_data), user_id)
         return redirect(request.path)
 
 
@@ -49,5 +61,13 @@ class CreateUser(View):
         })
 
     def post(self, request):
-        print(request.POST.get('user_data'))
-        return redirect(request.path)
+        try:
+            json_data = json.loads(request.POST.get('user_data'))
+            json_data['connection'] = DEFAULT_DB_CONNECTION
+            json_data['email_verified'] = False
+            json_data['password'] = str(uuid4())
+        except json.decoder.JSONDecodeError:
+            return redirect(request.path)
+        result_json = create_user(json.dumps(json_data))
+        result = json.loads(result_json)
+        return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")

@@ -39,9 +39,15 @@ main {
 .list-selection li {
     width: 100%;
     padding: .3em;
+    cursor: pointer;
 }
 
 .list-selection li.selected {
     background-color: blue;
     color: #ffffff;
+}
+
+.list-action {
+    cursor: pointer;
+    font-size: xx-large;
 }
