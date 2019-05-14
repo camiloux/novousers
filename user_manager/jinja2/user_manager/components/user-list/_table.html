@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block tbody %}
-    <template v-for="user in users">
+    <template v-for="user in filteredUsers">
         {{ app_t.users() }}
     </template>
 {% endblock %}

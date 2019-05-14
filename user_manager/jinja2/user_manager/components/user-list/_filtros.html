@@ -3,8 +3,8 @@
 
 {# Row1 #}
 {% set row1 %}
-    {{ naui_f.select(label='Aplicación',name='aplicacion',options='', class='col-md-2') }}
-    {{ naui_f.select(label='Perfil',name='perfil',options='', class='col-md-2') }}
+    {{ naui_f.vue_select(label='Aplicación',name='aplicacion',options='apps', class='col-md-2', display='app_name',vmodel='filters.app') }}
+    {{ naui_f.vue_select(label='Perfil',name='perfil',options='profiles', class='col-md-2', display='name',vmodel='filters.profile') }}
 {% endset %}
 
 <div class="block">

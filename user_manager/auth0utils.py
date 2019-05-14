@@ -46,7 +46,7 @@ def auth_request(method, url, payload=None):
 
 
 def get_all_users():
-    fields = 'user_id,username,email,user_metadata'
+    fields = 'user_id,username,email,user_metadata,app_metadata'
     return auth_request('GET', f'/api/v2/users?fields={fields}')
 
 

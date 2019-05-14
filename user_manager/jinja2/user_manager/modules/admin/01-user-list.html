@@ -22,7 +22,50 @@
         new Vue({
             el: '#main-app',
             data: {
-                users: {{ users }}
+                profiles: {{ profiles|tojson }},
+                apps: {{ apps|tojson }},
+                users: {{ users }},
+                searchWord: '',
+                filters: {
+                    profile: '',
+                    app: ''
+                }
+            },
+            computed: {
+                filteredUsers: function () {
+                    var filteredUsers = this.users;
+                    var self = this;
+                    if (this.filters.profile) {
+                        filteredUsers = filteredUsers.filter(function (user) {
+                            var profile = self.getUserMeta(user, 'profile');
+                            if (profile) {
+                                console.log('PROFILE', profile, self.filters.profile);
+                                return profile.id === self.filters.profile.id;
+                            } else {
+                                return false;
+                            }
+                        });
+                    }
+                    if (this.filters.app) {
+                        filteredUsers = filteredUsers.filter(function (user) {
+                            var userPermissions = user.hasOwnProperty('app_metadata') ?
+                                user.app_metadata.permissions : [];
+                            if (userPermissions !== null) {
+                                for (var i = 0; i < userPermissions.length; i++) {
+                                    console.log('APP', userPermissions[i].app, self.filters.app);
+                                    if (userPermissions[i].app === self.filters.app.app_id) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        });
+                    }
+                    if (this.searchWord) {
+
+                    }
+                    return filteredUsers;
+                }
             },
             methods: {
                 getUserMeta: function(user, attribute) {
