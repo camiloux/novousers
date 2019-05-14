@@ -1,0 +1,26 @@
+{% extends 'user_manager/partials/base.html' %}
+
+{% block aside %}
+{% endblock %}
+
+{% block main %}
+    <section class="login">
+        <div class="container-fluid">
+            <div class="w600 pad">
+                <div class="text-center">
+                    <img src="{{ static('user_manager/pix/novo-logo.png') }}">
+                </div>
+                <h3>Administración de usuarios de Auth0</h3>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="user">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

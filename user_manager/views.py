@@ -2,6 +2,7 @@ import json
 from uuid import uuid4
 
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
 from django.urls import reverse
@@ -15,10 +16,24 @@ from user_manager.utils import get_apps_list, get_profiles
 
 class Login(View):
     def get(self, request):
-        return redirect('/')
+        return render(request, 'user_manager/modules/login.html')
 
 
-class Index(View):
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('user_manager:login')
+
+
+class AuthView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect('user_manager:login')
+
+
+class Index(AuthView):
     def get(self, request):
         users, code = get_all_users()
         return render(request, 'user_manager/modules/admin/01-user-list.html', {
@@ -26,7 +41,7 @@ class Index(View):
         })
 
 
-class ViewUser(View):
+class ViewUser(AuthView):
     def get(self, request):
         username = request.GET.get('user_id', None)
         if username:
@@ -57,7 +72,7 @@ class ViewUser(View):
         return redirect(f'{request.path}?user_id={user_id}')
 
 
-class DeleteUser(View):
+class DeleteUser(AuthView):
     def post(self, request):
         user_id = request.POST.get('user_id')
         response, status = delete_user(user_id)
@@ -79,7 +94,7 @@ class CreateUser(View):
         }
         data = json.dumps(user)
 
-        return render(request, 'user_manager/02-user.html', {
+        return render(request, 'user_manager/modules/admin/02-user.html', {
             'data': mark_safe(data), 'apps': get_apps_list(), 'creating': True
         })
 
