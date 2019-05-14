@@ -2,7 +2,7 @@ import json
 from uuid import uuid4
 
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import render, redirect
 
 from django.urls import reverse
@@ -17,6 +17,20 @@ from user_manager.utils import get_apps_list, get_profiles
 class Login(View):
     def get(self, request):
         return render(request, 'user_manager/modules/login.html')
+
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            username=username, password=password
+        )
+        if user:
+            login(request, user)
+            return redirect('user_manager:index')
+        else:
+            messages.add_message(request, messages.ERROR, 'Credenciales invalidas', extra_tags='alert-danger')
+            return redirect('user_manager:login')
 
 
 class Logout(View):
