@@ -10,7 +10,7 @@
 {% block main %}
 
     {# Header #}
-    {{ page.navigation(title='Editar usuario') }}
+    {{ page.navigation(title='Crear usuario' if creating else 'Editar usuario') }}
 
     {# Incluir componentes header y accciones #}
     {% include 'user_manager/components/user/_info-general.html' %}

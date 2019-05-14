@@ -107,9 +107,10 @@ class CreateUser(View):
             'user_metadata': {}
         }
         data = json.dumps(user)
+        profiles = get_profiles()
 
         return render(request, 'user_manager/modules/admin/02-user.html', {
-            'data': mark_safe(data), 'apps': get_apps_list(), 'creating': True
+            'data': mark_safe(data), 'apps': get_apps_list(), 'creating': True, 'profiles': profiles
         })
 
     def post(self, request):

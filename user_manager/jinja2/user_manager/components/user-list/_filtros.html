@@ -3,8 +3,11 @@
 
 {# Row1 #}
 {% set row1 %}
-    {{ naui_f.vue_select(label='Aplicación',name='aplicacion',options='apps', class='col-md-2', display='app_name',vmodel='filters.app') }}
-    {{ naui_f.vue_select(label='Perfil',name='perfil',options='profiles', class='col-md-2', display='name',vmodel='filters.profile') }}
+{{ naui_f.vue_select(label='Aplicación',name='aplicacion',options='apps', class='col-md-2', display='app_name',vmodel='filters.app') }}
+{{ naui_f.vue_select(label='Perfil',name='perfil',options='profiles', class='col-md-2', display='name',vmodel='filters.profile') }}
+<div class="form-group col-md-3 pad-label align-self-end">
+    <a href="{{ url('user_manager:create-user') }}" class="btn btn-outline-primary">Crear nuevo usuario</a>
+</div>
 {% endset %}
 
 <div class="block">
@@ -15,8 +18,8 @@
                 <input class="form-control" name="search" id="search" placeholder="Buscar" v-model="searchWord">
                 <div class="input-group-append">
                     <span class="input-group-text">
-                    <i class="fa fa-search"></i>
-                        </span>
+                        <i class="fa fa-search"></i>
+                    </span>
                 </div>
             </div>
         </div>
