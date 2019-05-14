@@ -62,13 +62,21 @@
                         });
                     }
                     if (this.searchWord) {
+                        filteredUsers = filteredUsers.filter(function (user) {
+                            return !!(
+                                self.checkSubString(user.username) ||
+                                self.checkSubString(user.email) ||
+                                self.checkSubString(self.getUserMeta(user, 'first_name')) ||
+                                self.checkSubString(self.getUserMeta(user, 'last_name'))
+                            );
 
+                        });
                     }
                     return filteredUsers;
                 }
             },
             methods: {
-                getUserMeta: function(user, attribute) {
+                getUserMeta: function (user, attribute) {
                     if (user.hasOwnProperty('user_metadata')) {
                         return user.user_metadata[attribute] || '';
                     } else {
@@ -82,6 +90,10 @@
                     } else {
                         return 'N/A'
                     }
+                },
+                checkSubString(string) {
+                    var ret = string.toLowerCase().indexOf(this.searchWord.toLowerCase());
+                    return ret > -1;
                 }
             }
         })
