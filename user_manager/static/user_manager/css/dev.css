@@ -28,9 +28,8 @@
     color: #ffffff;
 }
 
-.list-action {
+.btn-action {
     cursor: pointer;
-    font-size: xx-large;
 }
 
 .alert-container {

@@ -14,6 +14,18 @@ class App(models.Model):
         verbose_name_plural = 'Apps'
 
 
+class Profile(models.Model):
+    name = models.CharField(max_length=300, verbose_name='Nombre')
+    apps = models.ManyToManyField(App, verbose_name='Apps que pertenecen a este perfil')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Perfil'
+        verbose_name_plural = 'Perfiles'
+
+
 class AppRole(models.Model):
     app = models.ForeignKey(App, models.PROTECT, verbose_name='App')
     name = models.CharField(max_length=150, verbose_name='Nombre')

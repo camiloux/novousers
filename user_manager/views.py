@@ -4,14 +4,18 @@ from uuid import uuid4
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
-# Create your views here.
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View
 
-from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, patch_user, \
-    delete_user
-from user_manager.utils import get_apps_list
+from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, \
+    patch_user, delete_user
+from user_manager.utils import get_apps_list, get_profiles
+
+
+class Login(View):
+    def get(self, request):
+        return redirect('/')
 
 
 class Index(View):
@@ -27,8 +31,9 @@ class ViewUser(View):
         username = request.GET.get('user_id', None)
         if username:
             data, code = get_user_by_username(username)
-            return render(request, 'user_manager/02-user.html', {
-                'data': mark_safe(data), 'apps': get_apps_list()
+            profiles = get_profiles()
+            return render(request, 'user_manager/modules/admin/02-user.html', {
+                'data': mark_safe(data), 'apps': get_apps_list(), 'profiles': profiles
             })
         return redirect('user_manager:index')
 

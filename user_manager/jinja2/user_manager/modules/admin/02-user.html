@@ -1,4 +1,5 @@
 {% extends 'user_manager/partials/base.html' %}
+{% import 'user_manager/_bpm/naui-page.html' as page %}
 
 {# Titulo e intro #}
 {% set title = 'Edición de usuario' %}
@@ -9,6 +10,144 @@
 {% block main %}
 
     {# Header #}
-    {{ page.navigation(title=title, fa='arrow-left',href='/inmuebles') }}
+    {{ page.navigation(title='Editar usuario') }}
 
+    {# Incluir componentes header y accciones #}
+    {% include 'user_manager/components/user/_info-general.html' %}
+    {% include 'user_manager/components/user/_info-detalles.html' %}
+
+
+{% endblock %}
+
+{% block bottom %}
+    <script>
+        new Vue({
+            el: '#main-app',
+            data: {
+                user: {{ data }},
+                userApps: {},
+                apps: {{ apps|tojson }},
+                profiles: {{ profiles|tojson }},
+                clicks: {
+                    count: 0,
+                    timer: null
+                }
+            },
+            mounted: function () {
+                if (!this.user.hasOwnProperty('app_metadata')) {
+                    this.$set(this.user, 'app_metadata', {permissions: []})
+                }
+                if (!this.user.app_metadata.hasOwnProperty('permissions')) {
+                    this.$set(this.user.app_metadata, 'permissions', [])
+                }
+
+                if (!this.user.hasOwnProperty('user_metadata')) {
+                    this.$set(this.user, 'user_metadata', {
+                        first_name: '', last_name: ''
+                    })
+                }
+
+                if (!this.user.user_metadata.hasOwnProperty('first_name')) {
+                    this.$set(this.user.user_metadata, 'first_name', '')
+                }
+                if (!this.user.user_metadata.hasOwnProperty('last_name')) {
+                    this.$set(this.user.user_metadata, 'last_name', '')
+                }
+                if (!this.user.user_metadata.hasOwnProperty('profile')) {
+                    this.$set(this.user.user_metadata, 'profile', '')
+                }
+
+
+                var permissions = this.user.app_metadata.permissions;
+                permissions.forEach(function (item) {
+                    this.$set(this.userApps, item.app, true)
+                }, this);
+
+                this.apps.forEach(function (app) {
+                    if (!this.userApps.hasOwnProperty(app.app_id)) {
+                        this.$set(this.userApps, app.app_id, false)
+                    }
+                }, this);
+            },
+            computed: {
+                notSelectedApps: function () {
+                    return this.apps.filter(function (app) {
+                        return !this.userApps[app.app_id]
+                    }, this)
+                },
+                selectedApps: function () {
+                    return this.apps.filter(function (app) {
+                        return this.userApps[app.app_id]
+                    }, this)
+                },
+                userJson: function () {
+                    return JSON.stringify(this.user);
+                }
+            },
+            methods: {
+                setAppSelected: function (app, list) {
+                    app.selected = !app.selected;
+                    var self = this;
+                    this.clicks.count++;
+
+                    this.clicks.timer = setTimeout(function () {
+                        self.clicks.count = 0;
+                    }, 200);
+
+                    if (list === 'l') {
+                        this.selectedApps.forEach(function (app) {
+                            app.selected = false;
+                        });
+                    } else if (list === 'r') {
+                        this.notSelectedApps.forEach(function (app) {
+                            app.selected = false;
+                        });
+                    }
+
+                    if (this.clicks.count > 1) {
+                        clearTimeout(this.timer);
+                        this.toggleApp(app);
+                        this.clicks.count = 0;
+                    }
+                },
+                toggleApp: function (app) {
+                    var appInUser = this.userApps[app.app_id];
+                    app.selected = false;
+                    this.userApps[app.app_id] = !appInUser;
+
+                    if (appInUser) {
+                        this.user.app_metadata.permissions.forEach(function (toRemoveApp, index) {
+                            if (toRemoveApp.app === app.app_id) {
+                                this.user.app_metadata.permissions.splice(index, 1);
+                            }
+                        }, this);
+                    } else {
+                        this.user.app_metadata.permissions.push({
+                            app: app.app_id, role: 'User'
+                        });
+                    }
+                },
+                addApps: function () {
+                    this.notSelectedApps.forEach(function (app) {
+                        if (app.selected) {
+                            this.toggleApp(app);
+                        }
+
+                    }, this);
+                },
+                removeApps: function () {
+                    this.selectedApps.forEach(function (app) {
+                        if (app.selected) {
+                            this.toggleApp(app);
+                        }
+                    }, this);
+                },
+                confirmDeleteUser: function () {
+                    if (confirm('¿Desea eliminar este usuario?')) {
+                        this.$refs.deleteUser.submit();
+                    }
+                }
+            }
+        })
+    </script>
 {% endblock %}

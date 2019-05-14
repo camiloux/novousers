@@ -23,6 +23,23 @@
             el: '#main-app',
             data: {
                 users: {{ users }}
+            },
+            methods: {
+                getUserMeta: function(user, attribute) {
+                    if (user.hasOwnProperty('user_metadata')) {
+                        return user.user_metadata[attribute] || '';
+                    } else {
+                        return '';
+                    }
+                },
+                getUserProfile: function (user) {
+                    var profile = this.getUserMeta(user, 'profile');
+                    if (profile) {
+                        return profile.name;
+                    } else {
+                        return 'N/A'
+                    }
+                }
             }
         })
     </script>

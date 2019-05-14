@@ -17,8 +17,8 @@
 
 {% macro users() %}
     <tr>
-        <td>[[ user.first_name ]] [[ user.last_name ]]</td>
-        <td class="text-center">[[ user.profile || 'N/A' ]]</td>
+        <td>[[ getUserMeta(user, 'first_name') ]] [[ getUserMeta(user, 'last_name') ]]</td>
+        <td class="text-center">[[ getUserProfile(user) ]]</td>
         <td class="text-center"><span class="naui-date">[[ user.username ]]</span></td>
         <td class="text-center">[[ user.email ]]</td>
         <td class="text-center">

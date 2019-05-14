@@ -1,34 +1,59 @@
 {% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
 {% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
 
-{% set legend='DETALLES DEL INMUEBLE' %}
-{% set parq='Parqueaderos propios' %}
+{% set legend='PERMISOS' %}
 
 {% set row1 %}
-    {{ naui_f.input('precio-venta',label='Precio de venta', class='col-md-3', value='$300,000,000',modo=f_modo) }}
-    {{ naui_f.input('valor-arriendo',label='Valor arriendo', class='col-md-3', value='$1,600,000',modo=f_modo) }}
-    {{ naui_f.input('admon',label='Valor administración', class='col-md-3', value='$300,000', modo=f_modo) }}
+    {{ naui_f.vue_select(label='Perfil',name='perfil',options='profiles', class='col-md-2',display='name',vmodel='user.user_metadata.profile') }}
 {% endset %}
 
 {% set row2 %}
-    {{ naui_f.input('area',type='number',label='Área construida m2',class='col-md-3',value='120',modo=f_modo) }}
-    {{ naui_f.input('area-terraza',type='number',label='Área Terraza',class='col-md-3',value='0',modo=f_modo) }}
-    {{ naui_f.input('area-balcon',type='number',label='Área Balcón',class='col-md-3',value='5',modo=f_modo) }}
+<div class="col-5">
+    <div class="list-title">Aplicaciones disponibles</div>
+    <ul class="list-selection list-inline">
+        <li class="list-inline-item" v-for="app in notSelectedApps"
+            :class="{selected: app.selected}"
+            @click="setAppSelected(app, 'l')">
+            [[ app.app_name ]]
+            <input type="hidden" name="apps" :value="app.app_id">
+        </li>
+    </ul>
+</div>
+<div class="col-2 text-center pt-5">
+    <div @click="addApps">
+        <i class="fas fa-2x fa-long-arrow-alt-right"></i>
+    </div>
+    <div @click="removeApps">
+        <i class="fas fa-2x fa-long-arrow-alt-left"></i>
+    </div>
+</div>
+<div class="col-5">
+    <div class="list-title">Aplicaciones seleccionadas</div>
+    <ul class="list-selection list-inline">
+        <li class="list-inline-item" v-for="app in selectedApps" :class="{selected: app.selected}"
+            @click="setAppSelected(app, 'r')">
+            [[ app.app_name ]]
+        </li>
+    </ul>
+</div>
 {% endset %}
 
 {% set row3 %}
-    {{ naui_f.input('niveles',label='Niveles<br>(Pisos del inmueble)',class='col-md-2',value='1',modo=f_modo) }}
-    {{ naui_f.input('alcobas',label='Alcobas<br>(Excluyendo alcoba de servicio)',class='col-md-2',value='3',modo=f_modo) }}
-    {{ naui_f.input('banos',label='Baños<br>(Excluyendo baño de servicio)',class='col-md-2',value='2',modo=f_modo) }}
-{% endset %}
-
-{% set row4 %}
-    <div class="col-12">
-        <h6>{{ parq }}</h6>
-    </div>
-
-    {{ naui_f.input('independientes',type='number',label='Independientes',class='col-md-2',value='0',modo=f_modo) }}
-    {{ naui_f.input('enlinea',type='number',label='En línea',class='col-md-2',value='2',modo=f_modo) }}
+<div class="form-group col-auto">
+    <form method="post">
+        {{ csrf_input }}
+        <input type="hidden" name="user_data" :value="userJson">
+        <button type="submit" class="btn btn-outline-primary">
+            {% if creating %}Crear usuario{% else %}Actualizar usuario{% endif %}
+        </button>
+    </form>
+</div>
+<div class="form-group col-auto">
+    <a href="{{ url('user_manager:index') }}" class="btn btn-outline-primary">Cancelar</a>
+</div>
+<div class="form-group col-auto">
+    <div class="btn btn-outline-primary" @click="confirmDeleteUser">Eliminar usuario</div>
+</div>
 {% endset %}
 
 <div class="block">
@@ -42,9 +67,6 @@
         </div>
         <div class="form-row">
             {{ row3 }}
-        </div>
-        <div class="form-row">
-            {{ row4 }}
         </div>
     </fieldset>
 </div>

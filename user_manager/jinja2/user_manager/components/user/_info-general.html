@@ -1,47 +1,31 @@
 {% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
 {% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
 
-{% set legend='INFORMACIÓN GENERAL DEL INMUEBLE' %}
-{% set location={'sector':'Los Andes','address':'Cll 100-Cll 80 / Autopista norte- Kr 68'} %}
+{% set legend='DATOS DE USUARIO' %}
+{% set f_modo='disabled' if not creating else '' %}
 
-{% set map %}
-    <div id="mapa-inmueble">
-        <img class="w-100" src="http://via.placeholder.com/300x250">
-        <div class="map-footer">
-            <dt>{{ location.sector }}</dt>
-            <dd>{{ location.address }}</dd>
-        </div>
-    </div>
-{% endset %}
 
 {% set row1 %}
-    {{ naui_f.input(label='Ciudad',name='ciudad',class='col-md-4',value='Bogotá',modo=f_modo) }}
-    {{ naui_f.input(label='Año de contrucción',name='ano-construccion',class='col-md-4',value='2005',modo=f_modo) }}
-    {{ naui_f.input(label='Orientación',name='orientacion',class='col-md-4',value='exterior',modo=f_modo) }}
+    {{ naui_f.input(label='Nombre de usuario',name='user',class='col-md-3',vmodel='user.username',modo=f_modo) }}
+    {{ naui_f.input(label='Correo',type='email',name='email',class='col-md-3',vmodel='user.email',modo=f_modo) }}
+    {{ naui_f.input(label='Nombre',name='nombre',class='col-md-3',vmodel='user.user_metadata.first_name') }}
+    {{ naui_f.input(label='Apellido',name='apellido',class='col-md-3',vmodel='user.user_metadata.last_name') }}
 {% endset %}
 
 {% set row2 %}
-    {{ naui_f.input(label='Piso',name='piso',class='col-md-4',value='4',modo=f_modo) }}
-    {{ naui_f.input(label='Estrato',name='estrato',class='col-md-4',value='5',modo=f_modo) }}
-    {{ naui_f.input(label='Depósitos',name='depositos',class='col-md-4',value='1',modo=f_modo) }}
+    <form method="post" onsubmit="">
+        <button class="btn btn-outline-primary">Restaurar contraseña</button>
+    </form>
 {% endset %}
-
 
 <div class="block">
     <fieldset>
         <legend>{{ legend }}</legend>
-        <div class="form-row mt-2">
-            <div class="col-md-4">
-                {{ map }}
-            </div>
-            <div class="col-md-7 pl-5">
-                <div class="form-row">
-                    {{ row1 }}
-                </div>
-                <div class="form-row">
-                    {{ row2 }}
-                </div>
-            </div>
+        <div class="form-row ">
+            {{ row1 }}
+        </div>
+        <div class="form-row">
+            {{ row2 }}
         </div>
     </fieldset>
 </div>

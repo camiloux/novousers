@@ -1,9 +1,9 @@
-{% macro input(name,label,value,id,class,type,placeholder,modo) %}
+{% macro input(name,label,vmodel,id,class,type,placeholder,modo) %}
     <div class="form-group {{ class }}">
         <label>{{ label | safe }}</label>
-        <input id="{{ id }}" name="{{ name }}" class="form-control" type="{{ type }}"
+        <input id="{{ id }}" name="{{ name }}" class="form-control" type="{{ type }}"{% if vmodel %} v-model="{{ vmodel }}"{% endif %}
                placeholder="{% if placeholder %}{{ placeholder }}{% else %}{{ label }}{% endif %}"
-               {% if modo=='disabled' %}disabled{% endif %} {% if value %}value="{{ value }}"{% endif %}>
+               {% if modo=='disabled' %}readonly{% endif %}>
     </div>
 {% endmacro %}
 
@@ -14,6 +14,18 @@
             {% for option in options %}
                 <option value="{{ option.value }}">{{ option.label }}</option>
             {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+{% macro vue_select(name,label,options,id,class,display,value,vmodel) %}
+    <div class="form-group {{ class }}">
+        <label>{{ label | safe }}</label>
+        <select id="{{ id }}" name="{{ name }}" class="form-control" {% if modo=='disabled' %}disabled{% endif %}{% if vmodel %} v-model="{{ vmodel }}"{% endif %}>
+            <option value="">N/A</option>
+            <option v-for="option in {{ options }}" :value="option{{ '.{}'.format(value) if value else '' }}">
+                [[ option{{ '.{}'.format(display) if display else '' }} ]]
+            </option>
         </select>
     </div>
 {% endmacro %}
