@@ -23,9 +23,9 @@
         <td class="text-center">[[ user.email ]]</td>
         <td class="text-center">
             <a :href="'{{ url('user_manager:view-user') }}?user_id=' + user.user_id"><i class="fa fa-pencil"></i></a>
-            <form method="post" onsubmit="return window.confirm('Desea eliminar este usuario')">
+            <form method="post" action="{{ url('user_manager:delete-user') }}" onsubmit="return window.confirm('Desea eliminar este usuario')">
                 {{ csrf_input }}
-                <input type="hidden" :value="user.user_id">
+                <input type="hidden" name="user_id" :value="user.user_id">
                 <button type="submit"><i class="fa fa-trash"></i></button>
             </form>
         </td>

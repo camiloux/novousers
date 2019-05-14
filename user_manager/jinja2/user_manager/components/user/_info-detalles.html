@@ -4,7 +4,7 @@
 {% set legend='PERMISOS' %}
 
 {% set row1 %}
-    {{ naui_f.vue_select(label='Perfil',name='perfil',options='profiles', class='col-md-2',display='name',vmodel='user.user_metadata.profile') }}
+{{ naui_f.vue_select(label='Perfil',name='perfil',options='profiles', class='col-md-2',display='name',vmodel='user.user_metadata.profile') }}
 {% endset %}
 
 {% set row2 %}
@@ -52,8 +52,14 @@
     <a href="{{ url('user_manager:index') }}" class="btn btn-outline-primary">Cancelar</a>
 </div>
 <div class="form-group col-auto">
-    <div class="btn btn-outline-primary" @click="confirmDeleteUser">Eliminar usuario</div>
+    <form method="post" ref="deleteUser" action="{{ url('user_manager:delete-user') }}">
+        {{ csrf_input }}
+        <input type="hidden" name="user_id" :value="user.user_id">
+        <div class="btn btn-outline-primary" @click="confirmDeleteUser">Eliminar usuario</div>
+    </form>
 </div>
+
+
 {% endset %}
 
 <div class="block">
