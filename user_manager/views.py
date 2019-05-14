@@ -17,7 +17,7 @@ from user_manager.utils import get_apps_list
 class Index(View):
     def get(self, request):
         users, code = get_all_users()
-        return render(request, 'user_manager/01-index.html', {
+        return render(request, 'user_manager/modules/admin/01-user-list.html', {
             'users': mark_safe(users)
         })
 

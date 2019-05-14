@@ -1,0 +1,50 @@
+{% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
+{% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
+
+{% set legend='DETALLES DEL INMUEBLE' %}
+{% set parq='Parqueaderos propios' %}
+
+{% set row1 %}
+    {{ naui_f.input('precio-venta',label='Precio de venta', class='col-md-3', value='$300,000,000',modo=f_modo) }}
+    {{ naui_f.input('valor-arriendo',label='Valor arriendo', class='col-md-3', value='$1,600,000',modo=f_modo) }}
+    {{ naui_f.input('admon',label='Valor administración', class='col-md-3', value='$300,000', modo=f_modo) }}
+{% endset %}
+
+{% set row2 %}
+    {{ naui_f.input('area',type='number',label='Área construida m2',class='col-md-3',value='120',modo=f_modo) }}
+    {{ naui_f.input('area-terraza',type='number',label='Área Terraza',class='col-md-3',value='0',modo=f_modo) }}
+    {{ naui_f.input('area-balcon',type='number',label='Área Balcón',class='col-md-3',value='5',modo=f_modo) }}
+{% endset %}
+
+{% set row3 %}
+    {{ naui_f.input('niveles',label='Niveles<br>(Pisos del inmueble)',class='col-md-2',value='1',modo=f_modo) }}
+    {{ naui_f.input('alcobas',label='Alcobas<br>(Excluyendo alcoba de servicio)',class='col-md-2',value='3',modo=f_modo) }}
+    {{ naui_f.input('banos',label='Baños<br>(Excluyendo baño de servicio)',class='col-md-2',value='2',modo=f_modo) }}
+{% endset %}
+
+{% set row4 %}
+    <div class="col-12">
+        <h6>{{ parq }}</h6>
+    </div>
+
+    {{ naui_f.input('independientes',type='number',label='Independientes',class='col-md-2',value='0',modo=f_modo) }}
+    {{ naui_f.input('enlinea',type='number',label='En línea',class='col-md-2',value='2',modo=f_modo) }}
+{% endset %}
+
+<div class="block">
+    <fieldset>
+        <legend>{{ legend }}</legend>
+        <div class="form-row">
+            {{ row1 }}
+        </div>
+        <div class="form-row">
+            {{ row2 }}
+        </div>
+        <div class="form-row">
+            {{ row3 }}
+        </div>
+        <div class="form-row">
+            {{ row4 }}
+        </div>
+    </fieldset>
+</div>

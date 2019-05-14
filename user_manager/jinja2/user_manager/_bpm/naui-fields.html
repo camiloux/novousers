@@ -1,0 +1,96 @@
+{% macro input(name,label,value,id,class,type,placeholder,modo) %}
+    <div class="form-group {{ class }}">
+        <label>{{ label | safe }}</label>
+        <input id="{{ id }}" name="{{ name }}" class="form-control" type="{{ type }}"
+               placeholder="{% if placeholder %}{{ placeholder }}{% else %}{{ label }}{% endif %}"
+               {% if modo=='disabled' %}disabled{% endif %} {% if value %}value="{{ value }}"{% endif %}>
+    </div>
+{% endmacro %}
+
+{% macro select(name,label,options,id,class,modo) %}
+    <div class="form-group {{ class }}">
+        <label>{{ label | safe }}</label>
+        <select id="{{ id }}" name="{{ name }}" class="form-control" {% if modo=='disabled' %}disabled{% endif %}>
+            {% for option in options %}
+                <option value="{{ option.value }}">{{ option.label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+{% macro select_date(name,label,id, class,modo) %}
+    {% set words={'day':'Día','month':'Mes', 'year':'Año'} %}
+    <div class="form-group {{ class }}">
+        <label>{{ label }}</label>
+        <div class="form-row pl-0">
+            <div class="form-group col-md-4 mb-0">
+                <select class="form-control" {% if modo=='disabled' %}disabled{% endif %}>
+                    <option value="0">{{ words.day }}</option>
+                    {% for day in range(1,32) %}
+                        <option value="{{ day }}">{{ day }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                <select class="form-control" {% if modo=='disabled' %}disabled{% endif %}>
+                    <option value="0">{{ words.month }}</option>
+                    {% for month in range(1,13) %}
+                        <option value="{{ month }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                <select class="form-control" {% if modo=='disabled' %}disabled{% endif %}>
+                    <option value="0">{{ words.year }}</option>
+                    {% for year in range(1900,2018) %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro radio_inline(name,label,id,class,options,modo) %}
+    <div class="form-group {{ class }}">
+        <label>{{ label }}</label>
+        <div class="form-row">
+            {% for option in options %}
+                <div class="col-auto">
+                    <label class="naui-radio"><input type="radio" id="{{ option.value }}" name="{{ name }}"
+                                                     class="naui-radio" {% if modo=='disabled' %}disabled{% endif %}> {{ option.label }}</label>
+                </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro naui_checkbox(name,label,id,class,modo) %}
+    <div class="form-group {{ class }}">
+        <div class="naui-checkbox ">
+            <label for="{{ id }}" class="media">
+                <input id="{{ id }}" name="{{ name }}" type="checkbox" {% if modo=='disabled' %}disabled{% endif %}>
+                <span class="checkmark mr-2"><i class="fal fa-check"></i></span>
+                <div class="media-body">
+                    <span class="text">{{ label }}</span>
+                </div>
+            </label>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro checkbox(name,label,id,class,modo) %}
+    <div class="form-group {{ class }}">
+        <label for="{{ id }}"><input id="{{ id }}" name="{{ name }}" type="checkbox" {% if modo=='disabled' %}disabled{% endif %}> {{ label }}</label>
+    </div>
+{% endmacro %}
+
+{% macro textarea(name,label,id,class,modo, content) %}
+<div class="form-group {{ class }}">
+    <label>{{ label }}</label>
+    <textarea id="{{ id }}" name="{{ name }}" class="form-control" {% if modo=='disabled' %}disabled{% endif %}>{% if content %}{{ content}}{% endif %}</textarea>
+</div>
+{% endmacro %}
+

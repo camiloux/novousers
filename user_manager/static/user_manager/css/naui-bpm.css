@@ -1,0 +1,345 @@
+/* Layout */
+.block{
+    padding:1rem;
+}
+
+.naui-aside{
+    position:fixed;
+    width:180px;
+    top:0;
+    bottom:0;
+
+}
+
+.naui-main{
+    position:absolute;
+    width: calc(100% - 180px);
+    right:0;
+    top:0;
+    padding:.5rem 1rem;
+}
+
+/* Elements */
+
+.btn{
+    font-size:.9rem;
+}
+
+.btn i{
+    margin-right:.5rem;
+}
+
+.alert{
+    font-size:.85rem;
+}
+
+span.text{
+    font-weight:300;
+    color:#333;
+    font-size:.9rem;
+}
+
+.page-title{
+    font-size:1.4rem;
+    font-weight:400;
+    border-bottom:1px solid #e5e6e7;
+    padding-bottom:.75rem;
+}
+
+legend{
+    font-size:1.1rem;
+    border-bottom:1px solid #e5e6e7;
+    padding-bottom:.5rem;
+}
+
+p{
+    color:#555;
+    font-weight:400;
+}
+
+fieldset h6{
+    margin-top:.75rem;
+    margin-bottom:.5rem;
+}
+
+/* Controls */
+.naui-plus{
+    font-size:1.7rem;
+    color:#888;
+    cursor:pointer;
+    line-height:1;
+}
+
+/* Utilities */
+.no-label label{
+    display:none;
+}
+
+.pad-label{
+    padding-top:1.2rem;
+}
+
+/* Form Control Reset */
+.form-control:focus::-webkit-input-placeholder{
+    color:#ddd;
+}
+
+.form-control{
+    border-radius:3px;
+    background-color:#fafafa;
+    font-size:.9rem;
+}
+
+.form-control:focus{
+    box-shadow: none;
+}
+
+.form-group label{
+    font-size:.8rem;
+    color:#888;
+    margin-bottom:0.2rem;
+    padding-left:.2rem;
+}
+
+/* Naui- Radio */
+label.naui-radio{
+    cursor:pointer;
+    font-size: .9rem;
+    font-weight:400;
+    color:#333;
+    padding-right:1rem;
+    height:2rem;
+    padding-top:.25rem;
+}
+
+label.naui-radio input{
+    margin-right:.5rem;
+}
+
+/* Textarea */
+textarea{
+    resize:vertical;
+    min-height:90px;
+}
+
+/* Combo Check */
+.naui-combocheck .checkbox{
+    margin-bottom:0;
+}
+
+.naui-combocheck .checkbox input{
+    margin-right:.3rem;
+}
+
+.naui-combocheck .checkbox span.text{
+    font-size:.8rem;
+    font-weight:400;
+    color: #888;
+}
+
+.naui-combocheck .input{
+    margin-bottom:0;
+}
+
+.naui-combocheck .input label{
+    display:none;
+}
+
+
+/* Fecha */
+.naui-date{
+    border:1px solid #888;
+    padding:.3rem .75rem;
+    border-radius:1rem;
+    font-size:.8rem;
+    color:#2980b9;
+}
+
+/* Custom Checkbox */
+/* Customize the label (the container) */
+.naui-checkbox {
+    cursor: pointer;
+}
+
+.naui-checkbox span.text{
+    font-weight:400;
+}
+
+.naui-checkbox label{
+    cursor: pointer;
+}
+
+/* Hide the browser's default checkbox */
+.naui-checkbox input {
+    position: absolute;
+    opacity: 0;
+    height:0;
+    width:0;
+}
+
+/* Create a custom checkbox */
+.naui-checkbox .checkmark {
+    height: 20px;
+    width: 20px;
+    border-radius:5px;
+    text-align:center;
+    background-color:#fff;
+    box-shadow: inset 1px 1px 1px #ddd;
+    border:1px solid #ced4da;
+}
+
+.naui-checkbox .checkmark i{
+    opacity:0;
+}
+
+.naui-checkbox input:checked + .checkmark i{
+    color:#fff;
+    opacity:1;
+    position:absolute;
+    top:.25rem;
+    left:.2rem;
+    font-size:.8rem;
+}
+
+.naui-checkbox input:checked + .checkmark {
+    box-shadow:none;
+    position:relative;
+    background-color:#F7921E;
+    border-color: #F7921E;
+}
+
+.form-control:focus{
+    border: 1px solid #F7921E;
+}
+
+/* Aside Menu */
+.naui-aside .logo{
+
+}
+
+.naui-aside .nav-link{
+    font-size:.9rem;
+    padding-top:1rem;
+    padding-bottom:1rem;
+}
+
+.nav-link{
+    color:#444;
+}
+
+aside{
+    box-shadow: inset -1px 0 0 rgba(100, 100, 100, .1);
+}
+
+/* Tables */
+.table thead{
+    font-size:.8rem;
+    color:#666;
+    background-color: #F4F5F7;
+}
+
+.table{
+    border-right:1px solid #dee2e6;
+    border-left:1px solid #dee2e6;
+    border-bottom:1px solid #dee2e6;
+}
+
+.table thead th{
+    border-width:1px;
+    padding:.5rem .75rem;
+}
+
+.table td{
+    font-size:.9rem;
+    color:#555;
+}
+
+.table tr td{
+    border-right:1px solid #dee2e6;
+    border-top:none;
+    vertical-align: middle;
+}
+
+.table thead th{
+    border-right:1px solid #dee2e6;
+}
+
+.row-disabled td{
+    color:#ccc;
+}
+
+.row-disabled td .naui-checkbox .checkmark{
+    background-color:#fff;
+    box-shadow: none;
+    border:none;
+}
+
+.row-disabled td .naui-checkbox span.text{
+    color:#ccc;
+}
+
+.row-selected{
+    background-color: #EFF8F7;
+}
+
+
+
+/* Check Button */
+.check-button label{
+    border:1px solid  #ced4da;
+    display:inline-block;
+    padding:.45rem .75rem;
+    border-radius:4px;
+    background-color: #F4F5F7;
+    cursor:pointer;
+}
+
+.check-button label input{
+    margin-right:.5rem;
+}
+
+.td-checkbox label{
+    color:#555;
+    font-weight:400;
+    font-size:.9rem;
+    width:100%;
+    padding-top:.5rem;
+    padding-bottom:.5rem;
+}
+
+.td-checkbox label input{
+    margin-right:.5rem;
+}
+
+.td-checkbox span{
+    color:#555;
+    font-weight:400;
+    font-size:.9rem;
+    width:100%;
+    padding-top:.5rem;
+    padding-bottom:.5rem;
+}
+
+.estado{
+    background-color:#aaa;
+    padding:.2rem .5rem;
+    border-radius:4px;
+    text-transform:uppercase;
+    color:#fff;
+    font-size:.8rem;
+}
+
+/* Action Overlays */
+.naui-ao{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    width:350px;
+}
+
+.naui-ao .naui-ao-header{
+    background-color: #EBEBEB;
+}
+
+.naui-ao .naui-ao-header h5{
+    margin:0;
+    font-size:1rem;
+}

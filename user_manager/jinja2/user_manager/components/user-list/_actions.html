@@ -1,0 +1,13 @@
+{% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
+{% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
+
+<div class="block pt-1 pb-0">
+    <fieldset>
+        <div class="form-row">
+            {{ naui_a.boton(label='FILTRAR',class='col-auto',btn='btn-success',fa='filter') }}
+            {% if download == 'true' %}
+                {{ naui_a.boton(label='DESCARGAR EXCEL',class='col-auto',btn='btn-outline-success',fa='download') }}
+            {% endif %}
+        </div>
+    </fieldset>
+</div>

@@ -1,0 +1,29 @@
+{% extends 'user_manager/partials/base.html' %}
+{% import 'user_manager/_bpm/naui-page.html' as page %}
+
+
+{# Titulo e intro #}
+{% set title = 'Usuarios' %}
+
+{% block main %}
+
+    {# Header #}
+    {{ page.navigation(title=title) }}
+
+
+    {# Incluir componentes #}
+    {% include 'user_manager/components/user-list/_filtros.html' %}
+    {% include 'user_manager/components/user-list/_table.html' %}
+
+{% endblock %}
+
+{% block bottom %}
+    <script>
+        new Vue({
+            el: '#main-app',
+            data: {
+                users: {{ users }}
+            }
+        })
+    </script>
+{% endblock %}

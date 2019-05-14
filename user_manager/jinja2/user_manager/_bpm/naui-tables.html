@@ -1,0 +1,7 @@
+{% macro thead(data) %}
+    <tr>
+        {% for item in data %}
+            <th class="{{ item.class }}">{{ item.label }}</th>
+        {% endfor %}
+    </tr>
+{% endmacro %}

@@ -1,0 +1,102 @@
+*{
+    font-family: 'Open Sans',sans-serif;
+}
+
+._gray80{
+    background-color: #F4F5F7;
+}
+
+._gray60{
+    background-color: #091e420a;
+}
+
+._gray40{
+    background-color: #2980b9;
+    color:#fff;
+}
+
+._n10{
+    background-color: #fff;
+}
+
+._primary{
+    background-color: #000;
+    color:#fff;
+}
+
+.__primary{
+    color: #000;
+    border-color: #000;
+}
+
+.btn-primary{
+    background-color: #000;
+    color:#fff;
+    border-color: #000;
+}
+
+.btn-outline-primary{
+    color: #000;
+    border-color:#000;
+}
+
+.btn-success{
+    background-color: #F7921E;
+    border-color:#F7921E;
+}
+
+.btn-success:hover{
+    background-color: #c8741b;
+    border-color: #d57d1b;
+}
+
+.btn-outline-success{
+    color:#F7921E;
+    border-color:#F7921E;
+    font-weight:300;
+}
+
+.btn-outline-success:hover{
+    color:#fff;
+    border-color:#F7921E;
+    background-color:#F7921E;
+}
+
+
+
+.back-gris{
+    background-color: #F4F5F7;
+}
+
+.page-title{
+    color:#009FDA;
+    font-weight:300;
+}
+
+legend{
+    color:#555;
+    font-weight:300;
+    letter-spacing:1px;
+}
+
+.editar{
+    color: #1abc9c;
+}
+
+.naui-date{
+    color:#7f8c8d;
+    border-color:#ced4da;
+}
+
+.back-gris .naui-checkbox .checkmark{
+    background-color: #fff;
+    border:1px solid #ced4da;
+}
+
+.back-gris .form-control{
+    background-color:#fff;
+}
+
+.page-title i{
+    color: #F7921E;
+}

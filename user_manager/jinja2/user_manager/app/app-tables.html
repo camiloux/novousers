@@ -1,0 +1,43 @@
+{% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
+{% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
+
+{# Resultados de inmuebles #}
+{% macro inmueble(data, id) %}
+    <tr id="{{ id }}">
+        <td class="text-center">{{ data.codigo }}</td>
+        <td class="text-center">{{ data.tipo }}</td>
+        <td class="text-center">{{ data.area }}</td>
+        <td class="text-center"><span class="naui-date">{{ data.fecha }}</span></td>
+        <td class="text-center">{{ data.barrio }}</td>
+        <td class="text-center">{{ data.venta }}</td>
+        <td class="text-center">{{ data.arriendo }}</td>
+        <td class="text-center">{{ naui_a.detalles(href=data.href) }}</td>
+    </tr>
+{% endmacro %}
+
+{% macro users() %}
+    <tr>
+        <td>[[ user.first_name ]] [[ user.last_name ]]</td>
+        <td class="text-center">[[ user.profile || 'N/A' ]]</td>
+        <td class="text-center"><span class="naui-date">[[ user.username ]]</span></td>
+        <td class="text-center">[[ user.email ]]</td>
+        <td class="text-center">
+            <a :href="'{{ url('user_manager:view-user') }}?user_id=' + user.user_id"><i class="fa fa-pencil"></i></a>
+            <form method="post" onsubmit="return window.confirm('Desea eliminar este usuario')">
+                {{ csrf_input }}
+                <input type="hidden" :value="user.user_id">
+                <button type="submit"><i class="fa fa-trash"></i></button>
+            </form>
+        </td>
+    </tr>
+{% endmacro %}
+
+
+{# Listado de Clientes Corredor #}
+{% macro cliente(data,id) %}
+    <tr id="{{ id }}">
+        <td class="text-left">{{ data.nombre }}</td>
+        <td class="text-center">{{ data.telefono }}</td>
+        <td class="text-center">{{ data.email }}</td>
+    </tr>
+{% endmacro %}

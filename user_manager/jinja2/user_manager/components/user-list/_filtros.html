@@ -1,0 +1,27 @@
+{% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
+{% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
+
+{# Row1 #}
+{% set row1 %}
+    {{ naui_f.select(label='Aplicación',name='aplicacion',options='', class='col-md-2') }}
+    {{ naui_f.select(label='Perfil',name='perfil',options='', class='col-md-2') }}
+{% endset %}
+
+<div class="block">
+    <fieldset>
+        <div class="form-row">
+            <label>Realice la búsqueda por nombre de usuario o correo</label>
+            <div class="input-group">
+                <input class="form-control" name="search" id="search" placeholder="Buscar">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            {{ row1 }}
+        </div>
+    </fieldset>
+</div>

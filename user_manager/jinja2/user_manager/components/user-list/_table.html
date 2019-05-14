@@ -1,0 +1,24 @@
+{# Extiende del modelo de tablas #}
+{% extends 'user_manager/partials/base-table.html' %}
+
+{% import 'user_manager/_bpm/naui-tables.html' as naui_t %}
+{% import 'user_manager/app/app-tables.html' as app_t with context %}
+
+{# THEAD - Se parametriza el head #}
+{% set thead=[
+{'label':'Nombre Usuario','class':'text-left'},
+{'label':'Perfil','class':'text-center'},
+{'label':'Siglas','class':'text-center'},
+{'label':'Correo','class':'text-center'},
+{'label':'Acciones','class':'text-center'}
+] %}
+
+{% block thead %}
+    {{ naui_t.thead(data=thead) }}
+{% endblock %}
+
+{% block tbody %}
+    <template v-for="user in users">
+        {{ app_t.users() }}
+    </template>
+{% endblock %}

@@ -1,0 +1,51 @@
+{# Botón de editar en cada formulario, poner dentro de <legend> #}
+{% macro editar(id) %}
+    <span class="editar align-self-center"><i class="fal fa-edit"></i> Editar</span>
+{% endmacro %}
+
+
+{# Botón de eliminar fila #}
+{% macro remover(id, class) %}
+    <div id="{{ id }}" class="naui-plus {{ class }}">
+        <i class="fal fa-times-circle"></i>
+    </div>
+{% endmacro %}
+
+{# Botones de propósito genérico #}
+{% macro boton(label,id, class, btn, fa, href, target, fa_type='fal') %}
+    {% if not btn %}
+        {% set btn='btn-primary' %}
+    {% endif %}
+    <div class="form-group {{ class }}">
+        {% if not href %}
+            <div id="{{ id }}" class="btn {{ btn }}">{% if fa %}<i
+                    class="{{ fa_type }} fa-{{ fa }}"></i>{% endif %} {{ label }}</div>
+        {% endif %}
+        {% if href %}
+            <a href="{{ href }}" {% if target %}target="{{ target }}" {% endif %}id="{{ id }}" class="btn {{ btn }}">{% if fa %}<i
+                    class="{{ fa_type }} fa-{{ fa }}"></i>{% endif %} {{ label }}</a>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro button(label,id, class,btn,type,action,fa) %}
+    <div class="form-group {{ class }}">
+        <button type="{{ type }}" class="btn {{ btn }}">
+            {% if fa %}
+                <i class="fal fa-{{ fa }}"></i>
+            {% endif %}
+            {{ label }}
+        </button>
+    </div>
+{% endmacro %}
+
+{% macro detalles(id, href) %}
+    <a href="{{ href }}" class="mas-detalles">
+        <i class="fal fa-search"></i>
+    </a>
+{% endmacro %}
+
+
+{% macro action() %}
+
+{% endmacro %}

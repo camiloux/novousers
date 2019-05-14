@@ -1,19 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>User administrator</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href=""/>
+    <link rel="canonical" href="">
+
+    {# Stylesheets #}
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ static('user_manager/font-awesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ static('user_manager/font-awesome/css/fa-light.min.css') }}">
+    <link rel="stylesheet" href="{{ static('user_manager/font-awesome/css/fa-solid.min.css') }}">
+
     <link rel="stylesheet" type="text/css" href="{{ static('user_manager/css/dev.css') }}">
+    <link rel="stylesheet" href="{{ static('user_manager/css/naui-bpm.css') }}">
+    <link rel="stylesheet" href="{{ static('user_manager/css/color-scheme.css') }}">
+    <link rel="stylesheet" href="{{ static('user_manager/css/custom.css') }}">
 </head>
 <body>
 
-<main>
+{% block header %}
+
+{% endblock %}
+
+{% block aside %}
+    {% set modules=[
+        {'name':'Gestión de usuarios','href':'/'}
+    ] %}
+    {{ page.aside(modules=modules) }}
+{% endblock %}
+
+<main class="naui-main" id="main-app">
     {% block main %}
+
     {% endblock %}
 </main>
 
+{# Bottom Scripts #}
 <div class="alert-container">
     {% for message in get_messages(request) %}
         <div class="alert {{ message.extra_tags }}" onclick="this.parentNode.removeChild(this)">
@@ -22,9 +48,19 @@
     {% endfor %}
 </div>
 
-<script src="{{ static('user_manager/js/vue.js') }}"></script>
-<script type="text/javascript">Vue.options.delimiters = ['[[', ']]']</script>
+<section class="scripts">
+    <script src="{{ static('user_manager/js/vue.js') }}"></script>
+    <script type="text/javascript">Vue.options.delimiters = ['[[', ']]']</script>
+</section>
+
 {% block bottom %}
+
+
 {% endblock %}
+
 </body>
+
 </html>
+
+
+

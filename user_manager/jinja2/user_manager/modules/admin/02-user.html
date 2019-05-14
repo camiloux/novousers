@@ -1,0 +1,14 @@
+{% extends 'user_manager/partials/base.html' %}
+
+{# Titulo e intro #}
+{% set title = 'Edición de usuario' %}
+
+{#Solo lectura #}
+{% set f_modo='disabled' %}
+
+{% block main %}
+
+    {# Header #}
+    {{ page.navigation(title=title, fa='arrow-left',href='/inmuebles') }}
+
+{% endblock %}

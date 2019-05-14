@@ -1,0 +1,261 @@
+*{
+    font-family: 'Open Sans',sans-serif;
+}
+
+select.form-control:not([size]):not([multiple]){
+    height:35px;
+}
+
+.form-control::-webkit-input-placeholder{
+    opacity:.5;
+}
+
+.form-control:focus::-webkit-input-placeholder{
+    opacity:0;
+}
+
+.editar{
+    font-size:.9rem;
+    margin-left:1rem;
+    padding-left:1rem;
+    border-left:1px solid;
+    cursor:pointer;
+}
+
+.editar.innactive{
+    color:#888;
+}
+
+/* Estados de vacantes */
+.estado-vacante{
+    padding:.2rem 0rem;
+    border-radius:4px;
+    background-color:#fafafa;
+}
+
+.estado-vacante dt{
+    font-size:.7rem;
+    font-weight:300;
+    color:#fff;
+}
+
+.estado-vacante dd{
+    font-size:1.1rem;
+    margin-bottom:0;
+    font-weight:600;
+    color:#fff;
+}
+
+.mas-detalles{
+    font-size:1.2rem;
+    color:#888;
+}
+
+blockquote{
+    background-color: #F4F5F7;
+    padding:1rem;
+    border-left:5px solid #ddd;
+    max-width:450px;
+}
+
+blockquote h6{
+    font-size:1.2rem;
+    color: #000;
+}
+
+blockquote dt{
+    font-size:.8rem;
+    font-weight:400;
+    margin-bottom:0;
+    color:#888;
+}
+
+blockquote dt span{
+    font-weight:600;
+    margin-left:.3rem;
+    color:#333;
+}
+
+.ciudad-cuota{
+    font-size:.9rem;
+    text-align:right;
+    width:100%;
+    background-color: #FAFAFA;
+    border:1px solid #dee2e6;
+    padding:.2rem;
+    border-radius:4px;
+    margin-bottom:.3rem;
+    padding-left:.5rem;
+    padding-right:.5rem;
+}
+
+.ciudad-cuota .city{
+    font-size:.8rem;
+    color:#666
+}
+
+.ciudad-cuota .cuota{
+    margin-left:.3rem;
+    color: #1abc9c;
+    font-weight:600;
+}
+
+/* Estado Candidato */
+.estado-candidato{
+    border-radius:4px;
+    padding:.2rem.75rem;
+    margin-left:.5rem;
+    font-size:.9rem;
+    color:#fff;
+}
+
+/* Requisición Navigation */
+.req-nav{
+    border-bottom:1px solid #e5e6e7;
+    margin-top:-2rem;
+    padding-bottom:0;
+    margin-bottom:1.5rem;
+}
+
+.req-nav .btn{
+    border-radius:4px 4px 0 0;
+}
+
+.req-nav a{
+    display:block;
+}
+
+.req-nav a i{
+    margin-left:.3rem;
+    margin-right:.3rem;
+}
+
+/* Proceso Nav */
+.proceso-nav{
+    font-size:.85rem;
+}
+
+.proceso-nav .nav-item{
+    min-width:233px;
+    text-align:center;
+    margin-right:.5rem;
+    background-color: #EEEEEE;
+}
+
+.proceso-nav .nav-item:hover{
+    color:#555;
+}
+
+.proceso-nav .nav-item.active{
+    background-color: #1abc9c;
+    color:#fff;
+}
+
+/* Tabla selección */
+.tabla-seleccion .col1{
+    min-width:170px;
+}
+
+.tabla-seleccion td.col2{
+    min-width:120px;
+}
+
+.tabla-seleccion .coln{
+    max-width:70px;
+    overflow:hidden;
+    font-size:.7rem;
+    padding-left:.5rem;
+    vertical-align:middle
+}
+
+.tabla-seleccion td.document{
+    font-size:.8rem;
+}
+
+.tabla-seleccion .comments{
+    max-width:250px;
+    font-size:.8rem;
+}
+
+.commedit{
+    min-width:2rem;
+    font-size:1.2rem;
+    text-align:right;
+    cursor:pointer;
+    color: #1abc9c;
+}
+
+/* Retroalimentación */
+.feedback{
+    margin-top:.5rem;
+    font-size:.9rem;
+    border:1px solid #ced4da;
+    padding:.5rem;
+    max-width:170px;
+    border-radius:4px;
+    background-color:#fff;
+}
+
+.feedback label{
+    margin-bottom:0;
+}
+
+/* Card Indicador */
+.card-indicador .card-header{
+    background-color:#f4f4f4;
+}
+
+.card-indicador h6{
+    margin-top:0;
+    color:#555;
+    margin-bottom:0;
+}
+
+.card-indicador label{
+    font-size:.85rem;
+    color:#888;
+}
+
+.card-indicador .card-body h2{
+    margin:0;
+    color:#555;
+}
+
+.card-indicador .card-footer{
+    background-color:#fff;
+}
+
+.card-indicador dt{
+    font-size:.8rem;
+    font-weight:600;
+    color:#777;
+}
+
+.card-indicador dd{
+    margin-bottom:0;
+    color:#555;
+}
+
+.form-control:disabled{
+    background:#fafafa;
+}
+
+.map-footer{
+    margin-top:.5rem;
+}
+
+.map-footer dt{
+    font-size:.9rem;
+    color:#888;
+    font-weight:400;
+}
+
+.map-footer dd{
+    font-weight:400;
+    color:#555;
+}
+
+.w600{
+    max-width: 600px;
+    margin: 0 auto;
+}
