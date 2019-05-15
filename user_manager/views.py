@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.views import View
 
 from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, \
-    patch_user, delete_user
+    patch_user, delete_user, signup_user, request_password_reset
 from user_manager.utils import get_apps_list, get_profiles
 
 
@@ -120,11 +120,32 @@ class CreateUser(View):
             json_data['email_verified'] = False
             json_data['password'] = str(uuid4())
         except json.decoder.JSONDecodeError:
+            messages.add_message(request, messages.ERROR,
+                                 'Se han recibido datos inválidos. Por favor intente de nuevo.',
+                                 extra_tags='alert-danger')
             return redirect(request.path)
         response, status = create_user(json.dumps(json_data))
         result = json.loads(response)
-        if status == 201:
+        if status == 201 or status == 200:
             messages.add_message(request, messages.SUCCESS, 'Usuario creado', extra_tags='alert-success')
+            return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")
         else:
             messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
-        return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")
+            return redirect('user_manager:create-user')
+
+
+class ResetPassword(AuthView):
+    def post(self, request):
+        user_id = request.POST.get('user_id')
+        if request.POST.get('email'):
+            response, status = request_password_reset(request.POST['email'])
+            if status == 201:
+                messages.add_message(request, messages.SUCCESS,
+                                     'Se ha enviado un correo para reestablecer la contraseña',
+                                     extra_tags='alert-success')
+            else:
+                messages.add_message(request, messages.ERROR,
+                                     response, extra_tags='alert-danger')
+        if user_id:
+            return redirect(reverse('user_manager:view-user') + '?user_id=' + user_id)
+        return redirect('user_manager:login')

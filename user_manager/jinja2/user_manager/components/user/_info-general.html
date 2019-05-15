@@ -14,7 +14,8 @@
 
 {% set row2 %}
 <div class="col-auto">
-    <form method="post" onsubmit="">
+    <form method="post" action="{{ url('user_manager:reset-password') }}"
+          onsubmit="confirm('¿Desea enviar email para cambiar la contraseña de este usuario?')">
         <button class="btn btn-outline-primary"><i class="fal fa-sync"></i> Restaurar contraseña</button>
     </form>
 </div>

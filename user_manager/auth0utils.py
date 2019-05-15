@@ -1,6 +1,10 @@
 import http.client
 import json
 
+from django.urls import reverse
+
+from novousers.settings import SITE_URL
+
 ENDPOINT = 'novonordiskco.auth0.com'
 CLIENT_ID = 'gS1tvn8zGmF3pcDrwmEtWOixPe846ATL'
 CLIENT_SECRET = 'HfFfYLGDVh_VsdQYRxq9vVj7jGKVZh7SGSwXN32bkCFxRSntp8PiL1L-xVMOp1Mb'
@@ -8,6 +12,7 @@ AUDIENCE = 'https://novonordiskco.auth0.com/api/v2/'
 GRANT_TYPE = 'client_credentials'
 
 DEFAULT_DB_CONNECTION = 'NovoUsers'
+DEFAULT_CONNECTION_ID = 'con_Vr8gcJCObeX43qbu'
 
 TOKEN_API = '/oauth/token'
 
@@ -65,3 +70,12 @@ def patch_user(data, user_id):
 
 def delete_user(user_id):
     return auth_request('DELETE', f'/api/v2/users/{user_id}')
+
+
+def request_password_reset(email):
+    data = {
+        'client_id': CLIENT_ID,
+        'email': email,
+        'connection': DEFAULT_DB_CONNECTION
+    }
+    return auth_request('POST', 'dbconnections/change_password', payload=json.dumps(data))

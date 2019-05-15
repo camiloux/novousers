@@ -12,3 +12,5 @@ DATABASES = {
         'PORT': '5432'
     }
 }
+
+SITE_URL = 'http://3.217.72.41'

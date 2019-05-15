@@ -2,32 +2,34 @@
 
 {% block main %}
 
-<section class="sectionLogin box-center">
-    <div class="boxLogin">
-        <div class="text-center">
-             <img class="logo" src="{{ static('user_manager/pix/novo-logo.png') }}">
-        </div>
-        <dd class="text-center">Administración de usuarios de Auth0</dd>
-        <form method="post">
-             {{ csrf_input }}
-        <div class="form-row justify-content-center">
-            <div class="form-group col-12">
-                <input type="text" class="form-control" placeholder="Digite su usuario" name="username">
+    <section class="sectionLogin box-center">
+        <div class="boxLogin">
+            <div class="text-center">
+                <img class="logo" src="{{ static('user_manager/pix/novo-logo.png') }}">
             </div>
-            <div class="form-group col-12">
-                 <input type="password" placeholder="Digite su contraseña" class="form-control" name="password">
-                <a href="/">¿Olvidó su contraseña?</a>
-            </div>
-            <div class="col-12">
-                <div class="alert alert-info">
-                    Usar este espacio para mensajes del sistema
+            <dd class="text-center">Administración de usuarios de Auth0</dd>
+            <form method="post">
+                {{ csrf_input }}
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-12">
+                        <input type="text" class="form-control" placeholder="Digite su usuario" name="username">
+                    </div>
+                    <div class="form-group col-12">
+                        <input type="password" placeholder="Digite su contraseña" class="form-control" name="password">
+                        <a href="/">¿Olvidó su contraseña?</a>
+                    </div>
+                    <div class="col-12">
+                        {% for message in get_messages(request) %}
+                            <div class="alert {{ message.extra_tags }}" onclick="this.parentNode.removeChild(this)">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group col-auto">
+                        <button type="submit" class="btn btn-outline-primary">Ingresar</button>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group col-auto">
-                <button type="submit" class="btn btn-outline-primary">Ingresar</button>
-            </div>
+            </form>
         </div>
-        </form>
-    </div>
-</section>
+    </section>
 {% endblock %}

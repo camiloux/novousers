@@ -42,53 +42,67 @@
                 clicks: {
                     count: 0,
                     timer: null
-                }
+                },
+                userProfile: ''
             },
             mounted: function () {
-                if (!this.user.hasOwnProperty('app_metadata')) {
-                    this.$set(this.user, 'app_metadata', {permissions: []})
+                var user = this.user;
+
+                if (!user.hasOwnProperty('app_metadata')) {
+                    this.$set(this.user, 'app_metadata', {permissions: []});
                 }
-                if (!this.user.app_metadata.hasOwnProperty('permissions')) {
-                    this.$set(this.user.app_metadata, 'permissions', [])
+                if (!user.app_metadata.hasOwnProperty('permissions')) {
+                    this.$set(this.user.app_metadata, 'permissions', []);
                 }
 
                 if (!this.user.hasOwnProperty('user_metadata')) {
                     this.$set(this.user, 'user_metadata', {
                         first_name: '', last_name: ''
-                    })
+                    });
                 }
 
-                if (!this.user.user_metadata.hasOwnProperty('first_name')) {
-                    this.$set(this.user.user_metadata, 'first_name', '')
+                if (!user.user_metadata.hasOwnProperty('first_name')) {
+                    this.$set(this.user.user_metadata, 'first_name', '');
                 }
-                if (!this.user.user_metadata.hasOwnProperty('last_name')) {
-                    this.$set(this.user.user_metadata, 'last_name', '')
+                if (!user.user_metadata.hasOwnProperty('last_name')) {
+                    this.$set(this.user.user_metadata, 'last_name', '');
                 }
-                if (!this.user.user_metadata.hasOwnProperty('profile')) {
-                    this.$set(this.user.user_metadata, 'profile', '')
+                if (!user.user_metadata.hasOwnProperty('profile')) {
+                    this.$set(this.user.user_metadata, 'profile', '');
                 }
 
+                this.userProfile = this.profiles.filter(function (profile) {
+                    return profile.name === user.user_metadata.profile;
+                })[0] || '';
 
-                var permissions = this.user.app_metadata.permissions;
+                var permissions = user.app_metadata.permissions;
                 permissions.forEach(function (item) {
-                    this.$set(this.userApps, item.app, true)
+                    this.$set(this.userApps, item.app, true);
                 }, this);
 
                 this.apps.forEach(function (app) {
                     if (!this.userApps.hasOwnProperty(app.app_id)) {
-                        this.$set(this.userApps, app.app_id, false)
+                        this.$set(this.userApps, app.app_id, false);
                     }
                 }, this);
+            },
+            watch: {
+                userProfile: function (newValue) {
+                    console.log(newValue);
+                    if (newValue) {
+                        this.user.user_metadata.profile = newValue.name;
+                    }
+                }
             },
             computed: {
                 notSelectedApps: function () {
                     return this.apps.filter(function (app) {
-                        return !this.userApps[app.app_id]
+                        return !this.userApps[app.app_id];
                     }, this)
                 },
                 selectedApps: function () {
                     return this.apps.filter(function (app) {
-                        return this.userApps[app.app_id]
+                        return this.userApps[app.app_id];
                     }, this)
                 },
                 userJson: function () {

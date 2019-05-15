@@ -32,13 +32,6 @@
 </main>
 
 {# Bottom Scripts #}
-<div class="alert-container">
-    {% for message in get_messages(request) %}
-        <div class="alert {{ message.extra_tags }}" onclick="this.parentNode.removeChild(this)">
-            {{ message }}
-        </div>
-    {% endfor %}
-</div>
 
 <section class="scripts">
     <script src="{{ static('user_manager/js/vue.js') }}"></script>

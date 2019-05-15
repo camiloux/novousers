@@ -43,8 +43,7 @@
                         filteredUsers = filteredUsers.filter(function (user) {
                             var profile = self.getUserMeta(user, 'profile');
                             if (profile) {
-                                console.log('PROFILE', profile, self.filters.profile);
-                                return profile.id === self.filters.profile.id;
+                                return profile === self.filters.profile.id;
                             } else {
                                 return false;
                             }
@@ -85,14 +84,6 @@
                         return user.user_metadata[attribute] || '';
                     } else {
                         return '';
-                    }
-                },
-                getUserProfile: function (user) {
-                    var profile = this.getUserMeta(user, 'profile');
-                    if (profile) {
-                        return profile.name;
-                    } else {
-                        return 'N/A'
                     }
                 },
                 checkSubString(string) {
