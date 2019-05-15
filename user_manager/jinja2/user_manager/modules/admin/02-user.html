@@ -7,10 +7,20 @@
 {#Solo lectura #}
 {% set f_modo='disabled' %}
 
+{% block header %}
+    <h3 class="page-title">
+        <a href="/">
+            <i class="fal fa-arrow-left mr-2"></i>
+        </a>
+        Editar usuario
+    </h3>
+{% endblock %}
+
 {% block main %}
 
-    {# Header #}
+    {# Header
     {{ page.navigation(title='Editar usuario') }}
+    #}
 
     {# Incluir componentes header y accciones #}
     {% include 'user_manager/components/user/_info-general.html' %}

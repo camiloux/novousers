@@ -8,34 +8,38 @@
 {% endset %}
 
 {% set row2 %}
-<div class="col-5">
-    <div class="list-title">Aplicaciones disponibles</div>
-    <ul class="list-selection list-inline">
-        <li class="list-inline-item" v-for="app in notSelectedApps"
-            :class="{selected: app.selected}"
-            @click="setAppSelected(app, 'l')">
-            [[ app.app_name ]]
-            <input type="hidden" name="apps" :value="app.app_id">
-        </li>
-    </ul>
-</div>
-<div class="col-2 text-center pt-5">
-    <div @click="addApps">
-        <i class="fas fa-2x fa-long-arrow-alt-right"></i>
+
+<div class="gridWidgetAdd">
+    <div class="left">
+        <div class="list-title">Aplicaciones disponibles</div>
+        <ul class="list-selection list-inline">
+            <li class="list-inline-item" v-for="app in notSelectedApps"
+                :class="{selected: app.selected}"
+                @click="setAppSelected(app, 'l')">
+                [[ app.app_name ]]
+                <input type="hidden" name="apps" :value="app.app_id">
+            </li>
+        </ul>
     </div>
-    <div @click="removeApps">
-        <i class="fas fa-2x fa-long-arrow-alt-left"></i>
+    <div class="controls">
+        <div @click="addApps">
+            <i class="fas fa-2x fa-long-arrow-alt-right"></i>
+        </div>
+        <div @click="removeApps">
+            <i class="fas fa-2x fa-long-arrow-alt-left"></i>
+        </div>
+    </div>
+    <div class="right">
+        <div class="list-title">Aplicaciones seleccionadas</div>
+        <ul class="list-selection list-inline">
+            <li class="list-inline-item" v-for="app in selectedApps" :class="{selected: app.selected}"
+                @click="setAppSelected(app, 'r')">
+                [[ app.app_name ]]
+            </li>
+        </ul>
     </div>
 </div>
-<div class="col-5">
-    <div class="list-title">Aplicaciones seleccionadas</div>
-    <ul class="list-selection list-inline">
-        <li class="list-inline-item" v-for="app in selectedApps" :class="{selected: app.selected}"
-            @click="setAppSelected(app, 'r')">
-            [[ app.app_name ]]
-        </li>
-    </ul>
-</div>
+
 {% endset %}
 
 {% set row3 %}
@@ -43,8 +47,8 @@
     <form method="post">
         {{ csrf_input }}
         <input type="hidden" name="user_data" :value="userJson">
-        <button type="submit" class="btn btn-outline-primary">
-            {% if creating %}Crear usuario{% else %}Actualizar usuario{% endif %}
+        <button type="submit" class="btn btn-primary">
+            {% if creating %}<i class="fal fa-plus"></i> Crear usuario{% else %} <i class="fal fa-save"></i> Actualizar usuario{% endif %}
         </button>
     </form>
 </div>
@@ -72,6 +76,9 @@
             {{ row2 }}
         </div>
         <div class="form-row">
+            <div class="col-12">
+            <hr>
+                </div>
             {{ row3 }}
         </div>
     </fieldset>

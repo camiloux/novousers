@@ -1,0 +1,55 @@
+.naui-main{
+    padding:0rem 0rem;
+}
+
+.sectionLogin{
+    background: #f2f2f2;
+    background-size:cover;
+    height:100vh;
+}
+
+.boxLogin{
+    max-width:400px;
+    background-color: #fff;
+    padding:3rem 2rem 1.5rem 2rem;
+    border-radius:10px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+}
+
+.boxLogin .logo{
+    height:100px;
+    margin-bottom:3rem;
+}
+
+.boxLogin dd{
+    font-weight:600;
+    font-size:1.1rem;
+    color:#888;
+    margin-bottom:1rem;
+}
+
+.boxLogin input::placeholder{
+    font-weight:300;
+}
+
+.boxLogin a{
+    font-weight:300;
+    font-size:.8rem;
+    color: #0046AD;
+    display:inline-block;
+    margin-top:.5rem;
+}
+
+.boxLogin button{
+    margin-top:.5rem;
+    border-color: #0046AD;
+    color: #0046AD;
+    padding-left:1.5rem;
+    padding-right:1.5rem;
+}
+
+.boxLogin button:hover{
+    background-color: #0046AD;
+    border-color: #0046AD;
+    color: #fff;
+}

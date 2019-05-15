@@ -18,35 +18,12 @@
     <link rel="stylesheet" type="text/css" href="{{ static('user_manager/css/dev.css') }}">
     <link rel="stylesheet" href="{{ static('user_manager/css/naui-bpm.css') }}">
     <link rel="stylesheet" href="{{ static('user_manager/css/color-scheme.css') }}">
-    <link rel="stylesheet" href="{{ static('user_manager/css/custom.css') }}">
-    {% block stylesheet %}
+    <link rel="stylesheet" href="{{ static('user_manager/css/login.css') }}">
 
-    {% endblock %}
 </head>
 <body>
 
-{% block aside %}
-    {% set modules=[
-    {'name':'Gestión de usuarios','href':'/'}
-    ] %}
-    {{ page.aside(modules=modules) }}
-{% endblock %}
-
-<main class="naui-content" id="main-app">
-    <section class="section-header">
-        <div class="title box-left">
-            {% block header %}
-
-            {% endblock %}
-        </div>
-        {% set salir={'label':'Cerrar Sesión','href':url('user_manager:logout')} %}
-        <div class="session box-left">
-            <div class="user-auth">Gestión de usuarios Novo Nordisk Colombia</div>
-            <div>
-                <a href="{{ salir.href }}" class="boton-sign-out btn btn-outline-secondary btn-sm"><i class="fa fa-lock"></i> {{ salir.label }} </a>
-            </div>
-        </div>
-    </section>
+<main class="" id="main-app">
     <div class="naui-main">
         {% block main %}
 

@@ -6,16 +6,18 @@
 
 
 {% set row1 %}
-    {{ naui_f.input(label='Nombre de usuario',name='user',class='col-md-3',vmodel='user.username',modo=f_modo) }}
-    {{ naui_f.input(label='Correo',type='email',name='email',class='col-md-3',vmodel='user.email',modo=f_modo) }}
-    {{ naui_f.input(label='Nombre',name='nombre',class='col-md-3',vmodel='user.user_metadata.first_name') }}
-    {{ naui_f.input(label='Apellido',name='apellido',class='col-md-3',vmodel='user.user_metadata.last_name') }}
+{{ naui_f.input(label='Nombre de usuario',name='user',class='col-md-3',vmodel='user.username',modo=f_modo) }}
+{{ naui_f.input(label='Correo',type='email',name='email',class='col-md-3',vmodel='user.email',modo=f_modo) }}
+{{ naui_f.input(label='Nombre',name='nombre',class='col-md-3',vmodel='user.user_metadata.first_name') }}
+{{ naui_f.input(label='Apellido',name='apellido',class='col-md-3',vmodel='user.user_metadata.last_name') }}
 {% endset %}
 
 {% set row2 %}
+<div class="col-auto">
     <form method="post" onsubmit="">
-        <button class="btn btn-outline-primary">Restaurar contraseña</button>
+        <button class="btn btn-outline-primary"><i class="fal fa-sync"></i> Restaurar contraseña</button>
     </form>
+</div>
 {% endset %}
 
 <div class="block">

@@ -14,7 +14,7 @@
 .list-selection {
     border: #dedede solid 1px;
     padding: .5em;
-    min-height: 300px;
+    min-height: 250px;
 }
 
 .list-selection li {

@@ -2,6 +2,10 @@
     font-family: 'Open Sans',sans-serif;
 }
 
+dt, dd, p{
+    color:#555;
+}
+
 ._gray80{
     background-color: #F4F5F7;
 }
@@ -20,63 +24,63 @@
 }
 
 ._primary{
-    background-color: #000;
+    background-color: #2980b9;
     color:#fff;
 }
 
 .__primary{
-    color: #000;
-    border-color: #000;
+    color: #711E82;
+    border-color: #711E82;
 }
 
 .btn-primary{
-    background-color: #000;
+    background-color: #009FDA;
     color:#fff;
-    border-color: #000;
+    border-color: #009FDA;
 }
 
 .btn-outline-primary{
-    color: #000;
-    border-color:#000;
+    color: #711E82;
+    border-color:#711E82;
 }
 
 .btn-success{
-    background-color: #F7921E;
-    border-color:#F7921E;
+    background-color:#009FDA;
+    border-color:#009FDA;
 }
 
 .btn-success:hover{
-    background-color: #c8741b;
-    border-color: #d57d1b;
+    background-color: #008bc5;
+    border-color:#008bc5;
+}
+
+.btn-success:focus{
+    box-shadow: none !important;
+}
+
+.btn-success:active{
+    background-color: #0071a1 !important;
+    border-color:#0071a1 !important;
+    box-shadow: none !important;
 }
 
 .btn-outline-success{
-    color:#F7921E;
-    border-color:#F7921E;
-    font-weight:300;
+    color:#1abc9c;
+    border-color:#1abc9c;
 }
 
 .btn-outline-success:hover{
     color:#fff;
-    border-color:#F7921E;
-    background-color:#F7921E;
+    border-color:#1abc9c;
+    background-color:#1abc9c;
 }
-
-
 
 .back-gris{
     background-color: #F4F5F7;
 }
 
-.page-title{
-    color:#009FDA;
-    font-weight:300;
-}
-
 legend{
     color:#555;
-    font-weight:300;
-    letter-spacing:1px;
 }
 
 .editar{
@@ -84,7 +88,7 @@ legend{
 }
 
 .naui-date{
-    color:#7f8c8d;
+    color:#009FDA;
     border-color:#ced4da;
 }
 
@@ -97,6 +101,7 @@ legend{
     background-color:#fff;
 }
 
-.page-title i{
-    color: #F7921E;
+.btn-primary i{
+    color:#fff;
 }
+

@@ -1,29 +1,33 @@
-{% extends 'user_manager/partials/base.html' %}
-
-{% block aside %}
-{% endblock %}
+{% extends 'user_manager/partials/base-login.html' %}
 
 {% block main %}
-    <section class="login">
-        <div class="container-fluid">
-            <div class="w600 pad">
-                <div class="text-center">
-                    <img src="{{ static('user_manager/pix/novo-logo.png') }}">
+
+<section class="sectionLogin box-center">
+    <div class="boxLogin">
+        <div class="text-center">
+             <img class="logo" src="{{ static('user_manager/pix/novo-logo.png') }}">
+        </div>
+        <dd class="text-center">Administración de usuarios de Auth0</dd>
+        <form method="post">
+             {{ csrf_input }}
+        <div class="form-row justify-content-center">
+            <div class="form-group col-12">
+                <input type="text" class="form-control" placeholder="Digite su usuario" name="username">
+            </div>
+            <div class="form-group col-12">
+                 <input type="password" placeholder="Digite su contraseña" class="form-control" name="password">
+                <a href="/">¿Olvidó su contraseña?</a>
+            </div>
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Usar este espacio para mensajes del sistema
                 </div>
-                <h3>Administración de usuarios de Auth0</h3>
-                <form method="post">
-                    {{ csrf_input }}
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="username">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" name="password">
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Ingresar</button>
-                    </div>
-                </form>
+            </div>
+            <div class="form-group col-auto">
+                <button type="submit" class="btn btn-outline-primary">Ingresar</button>
             </div>
         </div>
-    </section>
+        </form>
+    </div>
+</section>
 {% endblock %}

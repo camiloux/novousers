@@ -1,6 +1,7 @@
 /* Layout */
 .block{
-    padding:1rem;
+    padding-top:1rem;
+    padding-bottom:1rem;
 }
 
 .naui-aside{
@@ -11,12 +12,16 @@
 
 }
 
-.naui-main{
+.naui-content{
     position:absolute;
     width: calc(100% - 180px);
     right:0;
     top:0;
-    padding:.5rem 1rem;
+}
+
+.naui-main{
+    padding:1rem 1.5rem;
+    padding-top:calc(50px);
 }
 
 /* Elements */
@@ -39,22 +44,16 @@ span.text{
     font-size:.9rem;
 }
 
-.page-title{
-    font-size:1.4rem;
-    font-weight:400;
-    border-bottom:1px solid #e5e6e7;
-    padding-bottom:.75rem;
-}
-
 legend{
     font-size:1.1rem;
     border-bottom:1px solid #e5e6e7;
     padding-bottom:.5rem;
 }
 
+
 p{
-    color:#555;
-    font-weight:400;
+    color:#888;
+    font-weight:300;
 }
 
 fieldset h6{
@@ -96,7 +95,7 @@ fieldset h6{
 
 .form-group label{
     font-size:.8rem;
-    color:#888;
+    color:#666;
     margin-bottom:0.2rem;
     padding-left:.2rem;
 }
@@ -204,12 +203,12 @@ textarea{
 .naui-checkbox input:checked + .checkmark {
     box-shadow:none;
     position:relative;
-    background-color:#F7921E;
-    border-color: #F7921E;
+    background-color:#1abc9c;
+    border-color: #1abc9c;
 }
 
 .form-control:focus{
-    border: 1px solid #F7921E;
+    border: 1px solid #E98300;
 }
 
 /* Aside Menu */
@@ -242,11 +241,17 @@ aside{
     border-right:1px solid #dee2e6;
     border-left:1px solid #dee2e6;
     border-bottom:1px solid #dee2e6;
+    border-top:1px solid #dee2e6;
 }
 
 .table thead th{
     border-width:1px;
     padding:.5rem .75rem;
+    color: #009FDA;
+}
+
+.table td a i{
+    color: #009FDA;
 }
 
 .table td{
@@ -343,3 +348,107 @@ aside{
     margin:0;
     font-size:1rem;
 }
+
+
+/* Switch */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "NO";
+    font-weight:600;
+    color:#888;
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    text-align:center;
+    font-size:.8rem;
+    line-height:26px;
+}
+
+input:checked + .slider {
+    background-color: #1abc9c;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    color: #16a085;
+    font-weight:600;
+    content: "SI";
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+/* Box Utils */
+.box-center{
+    display:flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.box-center>*{
+    align-self: center;
+}
+
+.box-left{
+    display:flex;
+    justify-content: flex-start;
+    align-self: center;
+}
+
+.box-left>*{
+    align-self: center;
+}
+
+.box-right{
+    display:flex;
+    justify-content: flex-end;
+    align-self: center;
+}
+
+.box-right>*{
+    align-self: center;
+}
+
+
+

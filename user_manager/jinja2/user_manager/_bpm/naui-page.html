@@ -11,22 +11,25 @@
                 <a class="nav-link _gray60" href="{{ module.href }}">{{ module.name }}</a>
             {% endfor %}
         </nav>
+        {#
         <div class="block text-center">
-            <a href="{{ salir.href }}" class="btn __primary btn-sm"><i class="fal fa-sign-out"></i> {{ salir.label }} </a>
+            <a href="{{ salir.href }}" class="btn __primary btn-sm"><i class="fal fa-sign-out"></i> {{ salir.label }}
+            </a>
         </div>
+        #}
     </aside>
 {% endmacro %}
 
 {# Título de página dentro del Main #}
 {% macro navigation(title,class,fa,href) %}
-<div class="block {{ class }}">
+    <div class="block {{ class }}">
         <h5 class="page-title">
             {% if fa %}
-            <a href="{{ href }}" class="mr-2"><i class="fal fa-{{ fa }}"></i></a>
+                <a href="{{ href }}" class="mr-2"><i class="fal fa-{{ fa }}"></i></a>
             {% endif %}
             {{ title }}
         </h5>
-</div>
+    </div>
 {% endmacro %}
 
 

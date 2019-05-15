@@ -2,13 +2,17 @@
 {% import 'user_manager/_bpm/naui-page.html' as page %}
 
 
-{# Titulo e intro #}
-{% set title = 'Usuarios' %}
+{% block header %}
+    <h3 class="page-title">
+        Usuarios
+    </h3>
+{% endblock %}
+
 
 {% block main %}
 
     {# Header #}
-    {{ page.navigation(title=title) }}
+    {# {{ page.navigation(title=title) }} #}
 
 
     {# Incluir componentes #}

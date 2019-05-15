@@ -18,15 +18,15 @@
 {% macro users() %}
     <tr>
         <td>[[ getUserMeta(user, 'first_name') ]] [[ getUserMeta(user, 'last_name') ]]</td>
-        <td class="text-center">[[ getUserProfile(user) ]]</td>
+        <td class="text-left">[[ getUserProfile(user) ]]</td>
         <td class="text-center"><span class="naui-date">[[ user.username ]]</span></td>
         <td class="text-center">[[ user.email ]]</td>
-        <td class="text-center">
-            <a :href="'{{ url('user_manager:view-user') }}?user_id=' + user.user_id"><i class="fa fa-pencil"></i></a>
+        <td class="text-center box-center row-actions">
+            <a :href="'{{ url('user_manager:view-user') }}?user_id=' + user.user_id"><i class="fal fa-pencil"></i></a>
             <form method="post" action="{{ url('user_manager:delete-user') }}" onsubmit="return window.confirm('Desea eliminar este usuario')">
                 {{ csrf_input }}
                 <input type="hidden" name="user_id" :value="user.user_id">
-                <button type="submit"><i class="fa fa-trash"></i></button>
+                <button type="submit"><i class="fal fa-trash"></i></button>
             </form>
         </td>
     </tr>
