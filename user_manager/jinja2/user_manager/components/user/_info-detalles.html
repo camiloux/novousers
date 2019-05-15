@@ -14,8 +14,7 @@
         <div class="list-title">Aplicaciones disponibles</div>
         <ul class="list-selection list-inline">
             <li class="list-inline-item" v-for="app in notSelectedApps"
-                :class="{selected: app.selected}"
-                @click="setAppSelected(app, 'l')">
+                :class="{selected: app.selected}" @click="setAppSelected(app, 'l')">
                 [[ app.app_name ]]
                 <input type="hidden" name="apps" :value="app.app_id">
             </li>

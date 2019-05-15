@@ -68,10 +68,10 @@ def delete_user(user_id):
     return auth_request('DELETE', f'/api/v2/users/{user_id}')
 
 
-def request_password_reset(email):
+def request_password_reset(username):
     data = {
         'client_id': CLIENT_ID,
-        'email': email,
+        'username': username,
         'connection': DEFAULT_DB_CONNECTION
     }
     return auth_request('POST', 'dbconnections/change_password', payload=json.dumps(data))
