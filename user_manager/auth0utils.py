@@ -72,6 +72,6 @@ def request_password_reset(username):
     data = {
         'client_id': CLIENT_ID,
         'username': username,
-        'connection': DEFAULT_DB_CONNECTION
+        'connection_id': DEFAULT_CONNECTION_ID
     }
     return auth_request('POST', 'dbconnections/change_password', payload=json.dumps(data))
