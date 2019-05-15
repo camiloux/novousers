@@ -7,20 +7,22 @@
 {#Solo lectura #}
 {% set f_modo='disabled' %}
 
+{% if creating %}
+{% set title='Crear usuario' %}
+{% else %}
+{% set title='Editar usuario' %}
+{% endif %}
+
 {% block header %}
     <h3 class="page-title">
         <a href="/">
             <i class="fal fa-arrow-left mr-2"></i>
         </a>
-        Editar usuario
+        {{ title }}
     </h3>
 {% endblock %}
 
 {% block main %}
-
-    {# Header #}
-    {{ page.navigation(title='Crear usuario' if creating else 'Editar usuario') }}
-
     {# Incluir componentes header y accciones #}
     {% include 'user_manager/components/user/_info-general.html' %}
     {% include 'user_manager/components/user/_info-detalles.html' %}
