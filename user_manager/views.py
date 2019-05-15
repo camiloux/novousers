@@ -137,9 +137,9 @@ class CreateUser(View):
 class ResetPassword(AuthView):
     def post(self, request):
         user_id = request.POST.get('user_id')
-        if request.POST.get('email'):
-            response, status = request_password_reset(request.POST['email'])
-            if status == 201:
+        if request.POST.get('email') and request.POST.get('username'):
+            response, status = request_password_reset(request.POST['username'], request.POST['email'])
+            if status == 200:
                 messages.add_message(request, messages.SUCCESS,
                                      'Se ha enviado un correo para reestablecer la contraseña',
                                      extra_tags='alert-success')

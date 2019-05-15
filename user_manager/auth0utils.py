@@ -1,5 +1,5 @@
-import http.client
 import json
+import requests
 
 ENDPOINT = 'novonordiskco.auth0.com'
 CLIENT_ID = 'gS1tvn8zGmF3pcDrwmEtWOixPe846ATL'
@@ -16,34 +16,34 @@ API_ENDPOINT = ''
 
 
 def get_token():
-    conn = http.client.HTTPSConnection(ENDPOINT)
     payload = {
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET,
         'audience': AUDIENCE,
         'grant_type': GRANT_TYPE,
     }
-    headers = {'content-type': 'application/json'}
 
-    conn.request('POST', TOKEN_API, json.dumps(payload), headers)
+    full_url = f"https://{ENDPOINT}{TOKEN_API}"
+    response = requests.post(full_url, json=payload)
 
-    res = conn.getresponse()
-    data = res.read()
-    json_response = json.loads(data.decode('utf-8'))
-    return json_response.get('access_token', None), conn
+    json_response = json.loads(response.text)
+    return json_response.get('access_token', None)
 
 
 def auth_request(method, url, payload=None):
-    token, conn = get_token()
+    token = get_token()
     headers = {'authorization': 'Bearer ' + token}
-    if payload:
-        headers.update({'content-type': 'application/json'})
-    conn.request(method, url, body=payload, headers=headers)
 
-    res = conn.getresponse()
-    data = res.read()
+    full_url = f"https://{ENDPOINT}{url}"
 
-    return data.decode('utf-8'), res.code
+    if method == 'GET':
+        response = requests.get(full_url, payload, headers=headers)
+    elif method == 'POST':
+        response = requests.post(full_url, json=payload, headers=headers)
+    else:
+        return 'INVALID METHOD', 0
+
+    return response.text, response.status_code
 
 
 def get_all_users():
@@ -68,10 +68,12 @@ def delete_user(user_id):
     return auth_request('DELETE', f'/api/v2/users/{user_id}')
 
 
-def request_password_reset(username):
+def request_password_reset(username, email):
     data = {
-        'client_id': CLIENT_ID,
-        'username': username,
-        'connection_id': DEFAULT_CONNECTION_ID
+        'client_id': CLIENT_ID, 'email': email, 'connection': DEFAULT_DB_CONNECTION, 'username': username
     }
-    return auth_request('POST', 'dbconnections/change_password', payload=json.dumps(data))
+    url = "https://novonordiskco.auth0.com/dbconnections/change_password"
+
+    response = requests.request("POST", url, json=data)
+
+    return response.text, response.status_code

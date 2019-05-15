@@ -18,7 +18,8 @@
           onsubmit="confirm('¿Desea enviar email para cambiar la contraseña de este usuario?')">
         {{ csrf_input }}
         <input type="hidden" name="user_id" :value="user.user_id">
-        <input type="hidden" name="email" :value="user.username">
+        <input type="hidden" name="email" :value="user.email">
+        <input type="hidden" name="username" :value="user.username">
         <button class="btn btn-outline-primary"><i class="fal fa-sync"></i> Restaurar contraseña</button>
     </form>
 </div>
