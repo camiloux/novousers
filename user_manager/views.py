@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.views import View
 
 from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, \
-    patch_user, delete_user, signup_user, request_password_reset
+    patch_user, delete_user, request_password_reset
 from user_manager.utils import get_apps_list, get_profiles
 
 

@@ -1,10 +1,6 @@
 import http.client
 import json
 
-from django.urls import reverse
-
-from novousers.settings import SITE_URL
-
 ENDPOINT = 'novonordiskco.auth0.com'
 CLIENT_ID = 'gS1tvn8zGmF3pcDrwmEtWOixPe846ATL'
 CLIENT_SECRET = 'HfFfYLGDVh_VsdQYRxq9vVj7jGKVZh7SGSwXN32bkCFxRSntp8PiL1L-xVMOp1Mb'
