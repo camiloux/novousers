@@ -4,7 +4,7 @@ from user_manager.models import App, Profile
 
 
 class AppAdmin(admin.ModelAdmin):
-    readonly_fields = ('app_id', 'app_name')
+    readonly_fields = ('app_id', 'app_name', 'roles')
 
     list_display = ('app_id', 'app_name', 'endpoint')
     list_display_links = ('app_id', 'app_name')

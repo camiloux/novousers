@@ -26,6 +26,8 @@
     {# Incluir componentes header y accciones #}
     {% include 'user_manager/components/user/_info-general.html' %}
     {% include 'user_manager/components/user/_info-detalles.html' %}
+    {% include 'user_manager/components/user/_roles-apps.html' %}
+    {% include 'user_manager/components/user/_actions.html' %}
 
 
 {% endblock %}
@@ -76,13 +78,16 @@
                 })[0] || '';
 
                 var permissions = user.app_metadata.permissions;
-                permissions.forEach(function (item) {
-                    this.$set(this.userApps, item.app, true);
+                permissions.forEach(function (item, index) {
+                    this.$set(this.userApps, item.app, index);
                 }, this);
 
                 this.apps.forEach(function (app) {
                     if (!this.userApps.hasOwnProperty(app.app_id)) {
-                        this.$set(this.userApps, app.app_id, false);
+                        this.$set(this.userApps, app.app_id, -1);
+                    } else {
+                        console.log('ENTRA', this.userApps[app.app_id], permissions[this.userApps[app.app_id]].role);
+                        app.selected_role = permissions[this.userApps[app.app_id]].role;
                     }
                 }, this);
             },
@@ -97,12 +102,12 @@
             computed: {
                 notSelectedApps: function () {
                     return this.apps.filter(function (app) {
-                        return !this.userApps[app.app_id];
+                        return this.userApps[app.app_id] === -1;
                     }, this)
                 },
                 selectedApps: function () {
                     return this.apps.filter(function (app) {
-                        return this.userApps[app.app_id];
+                        return this.userApps[app.app_id] > -1;
                     }, this)
                 },
                 userJson: function () {
@@ -136,19 +141,16 @@
                     }
                 },
                 toggleApp: function (app) {
-                    var appInUser = this.userApps[app.app_id];
+                    var appIndex = this.userApps[app.app_id];
+                    var permissions = this.user.app_metadata.permissions;
                     app.selected = false;
-                    this.userApps[app.app_id] = !appInUser;
 
-                    if (appInUser) {
-                        this.user.app_metadata.permissions.forEach(function (toRemoveApp, index) {
-                            if (toRemoveApp.app === app.app_id) {
-                                this.user.app_metadata.permissions.splice(index, 1);
-                            }
-                        }, this);
+                    if (appIndex > -1) {
+                        permissions.splice(appIndex, 1);
                     } else {
-                        this.user.app_metadata.permissions.push({
-                            app: app.app_id, role: 'User'
+                        this.userApps[app.app_id] = permissions.length;
+                        permissions.push({
+                            app: app.app_id, role: ''
                         });
                     }
                 },
@@ -157,7 +159,6 @@
                         if (app.selected) {
                             this.toggleApp(app);
                         }
-
                     }, this);
                 },
                 removeApps: function () {
@@ -171,6 +172,12 @@
                     if (confirm('¿Desea eliminar este usuario?')) {
                         this.$refs.deleteUser.submit();
                     }
+                },
+                changeAppRole: function (app, role) {
+                    var appIndex = this.userApps[app.app_id];
+                    var permissions = this.user.app_metadata.permissions;
+
+                    permissions[appIndex].role = role;
                 }
             }
         })

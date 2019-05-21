@@ -1,0 +1,35 @@
+{% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
+{% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
+
+{% set row_buttons %}
+<div class="form-group col-auto">
+    <form method="post">
+        {{ csrf_input }}
+        <input type="hidden" name="user_data" :value="userJson">
+        <button type="submit" class="btn btn-primary">
+            {% if creating %}<i class="fal fa-plus"></i> Crear usuario{% else %} <i class="fal fa-save"></i> Actualizar usuario{% endif %}
+        </button>
+    </form>
+</div>
+<div class="form-group col-auto">
+    <a href="{{ url('user_manager:index') }}" class="btn btn-outline-primary">Cancelar</a>
+</div>
+<div class="form-group col-auto">
+    <form method="post" ref="deleteUser" action="{{ url('user_manager:delete-user') }}">
+        {{ csrf_input }}
+        <input type="hidden" name="user_id" :value="user.user_id">
+        <div class="btn btn-outline-primary" @click="confirmDeleteUser">Eliminar usuario</div>
+    </form>
+</div>
+{% endset %}
+
+<div class="block">
+    <fieldset>
+        <div class="form-row">
+            <div class="col-12">
+                <hr>
+            </div>
+            {{ row_buttons }}
+        </div>
+    </fieldset>
+</div>

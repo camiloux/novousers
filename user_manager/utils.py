@@ -4,7 +4,20 @@ from user_manager.models import App, Profile
 
 
 def get_apps_list():
-    return list(App.objects.annotate(selected=Value(False, output_field=BooleanField())).values())
+    apps = App.objects.annotate(
+        selected=Value(False, output_field=BooleanField())
+    ).values()
+
+    app_list = []
+    for app in apps:
+        app_dict = {
+            'app_name': app['app_name'],
+            'app_id': app['app_id'],
+            'roles': app['roles'].split(','),
+            'selected_role': ''
+        }
+        app_list.append(app_dict)
+    return app_list
 
 
 def get_profiles():

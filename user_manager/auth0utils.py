@@ -15,7 +15,10 @@ DEFAULT_CONNECTION_ID = 'con_Vr8gcJCObeX43qbu'
 
 TOKEN_API = '/oauth/token'
 
-API_ENDPOINT = ''
+
+APP_ENDPOINT_GET_DATA = '/get-app-data'
+APP_ENDPOINT_CREATE_USER = '/create-user'
+APP_ENDPOINT_DELETE_USER = '/delete-user'
 
 
 def get_token():
@@ -94,7 +97,7 @@ def request_password_reset(username, email):
 
 def get_app_data(instance):
     token = get_token()
-    app_data_response, code = authorized_request('GET', instance.endpoint + '/get-app-data', token=token)
+    app_data_response, code = authorized_request('GET', instance.endpoint + APP_ENDPOINT_GET_DATA, token=token)
     if code != 200:
         raise ValidationError('Endpoint is not configured properly.')
 

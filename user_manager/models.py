@@ -5,7 +5,7 @@ class App(models.Model):
     endpoint = models.URLField(verbose_name='Endpoint')
     app_id = models.CharField(max_length=50, verbose_name='App unique ID', unique=True, editable=False)
     app_name = models.CharField(max_length=100, verbose_name='App name', blank=True, editable=False, default='')
-    roles_list = models.TextField(editable=False, verbose_name='Roles (Texto plano)', blank=True, default='')
+    roles = models.TextField(editable=False, verbose_name='Roles (Texto plano)', blank=True, default='')
 
     def __str__(self):
         return self.app_id

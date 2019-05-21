@@ -1,0 +1,14 @@
+<div class="block" v-for="app in selectedApps" v-if="app.roles.length">
+    <fieldset>
+        <legend>Escoja rol - [[ app.app_name ]]</legend>
+        <div class="form-row">
+            <div class="form-group col-auto" v-for="role in app.roles">
+                <div class="radio">
+                    <label>
+                        <input type="radio" v-model="app.selected_role" :value="role" @change="changeAppRole(app, role)" name="role"> [[ role ]]
+                    </label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
