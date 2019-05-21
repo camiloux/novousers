@@ -77,7 +77,7 @@ class ViewUser(AuthView):
         except json.decoder.JSONDecodeError:
             return redirect(f'{request.path}?user_id={user_id}')
 
-        response, status = patch_user(json.dumps(json_data), user_id)
+        response, status = patch_user(json_data, user_id)
         if status == 200:
             messages.add_message(request, messages.SUCCESS, 'Usuario actualizado', extra_tags='alert-success')
         else:
@@ -124,7 +124,7 @@ class CreateUser(View):
                                  'Se han recibido datos inválidos. Por favor intente de nuevo.',
                                  extra_tags='alert-danger')
             return redirect(request.path)
-        response, status = create_user(json.dumps(json_data))
+        response, status = create_user(json_data)
         result = json.loads(response)
         if status == 201 or status == 200:
             messages.add_message(request, messages.SUCCESS, 'Usuario creado', extra_tags='alert-success')

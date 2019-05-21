@@ -1,5 +1,8 @@
 import json
 import requests
+from django.core.exceptions import ValidationError
+
+from user_manager.models import App
 
 ENDPOINT = 'novonordiskco.auth0.com'
 CLIENT_ID = 'gS1tvn8zGmF3pcDrwmEtWOixPe846ATL'
@@ -30,42 +33,52 @@ def get_token():
     return json_response.get('access_token', None)
 
 
-def auth_request(method, url, payload=None):
-    token = get_token()
+def authorized_request(method, url, payload=None, token=None):
+    if not token:
+        token = get_token()
+
     headers = {'authorization': 'Bearer ' + token}
 
-    full_url = f"https://{ENDPOINT}{url}"
-
     if method == 'GET':
-        response = requests.get(full_url, payload, headers=headers)
+        response = requests.get(url, payload, headers=headers)
     elif method == 'POST':
-        response = requests.post(full_url, json=payload, headers=headers)
+        response = requests.post(url, json=payload, headers=headers)
+    elif method == 'DELETE':
+        response = requests.delete(url, headers=headers)
+    elif method == 'PATCH':
+        response = requests.patch(url, json=payload, headers=headers)
     else:
         return 'INVALID METHOD', 0
 
     return response.text, response.status_code
 
 
+def auth0_request(method, url, payload=None):
+    full_url = f"https://{ENDPOINT}{url}"
+
+    return authorized_request(method, full_url, payload)
+
+
 def get_all_users():
     fields = 'user_id,username,email,user_metadata,app_metadata'
-    return auth_request('GET', f'/api/v2/users?fields={fields}')
+    return auth0_request('GET', f'/api/v2/users?fields={fields}')
 
 
 def get_user_by_username(user_id):
     fields = 'user_id,username,email,email_verified,user_metadata,app_metadata'
-    return auth_request('GET', f'/api/v2/users/{user_id}?fields={fields}')
+    return auth0_request('GET', f'/api/v2/users/{user_id}?fields={fields}')
 
 
 def create_user(data):
-    return auth_request('POST', '/api/v2/users', payload=data)
+    return auth0_request('POST', '/api/v2/users', payload=data)
 
 
 def patch_user(data, user_id):
-    return auth_request('PATCH', f'/api/v2/users/{user_id}', payload=data)
+    return auth0_request('PATCH', f'/api/v2/users/{user_id}', payload=data)
 
 
 def delete_user(user_id):
-    return auth_request('DELETE', f'/api/v2/users/{user_id}')
+    return auth0_request('DELETE', f'/api/v2/users/{user_id}')
 
 
 def request_password_reset(username, email):
@@ -77,3 +90,33 @@ def request_password_reset(username, email):
     response = requests.request("POST", url, json=data)
 
     return response.text, response.status_code
+
+
+def get_app_data(instance):
+    token = get_token()
+    app_data_response, code = authorized_request('GET', instance.endpoint + '/get-app-data', token=token)
+    if code != 200:
+        raise ValidationError('Endpoint is not configured properly.')
+
+    app_data = json.loads(app_data_response)
+    try:
+        instance.app_name = app_data['name']
+        instance.app_id = app_data['id']
+        instance.roles_list = ','.join(app_data['roles'])
+    except (KeyError, TypeError):
+        raise ValidationError(
+            'Endpoint get-app-data must return a JSON with the following structure:'
+            ' {"id": "string", "name": "string", "roles": ["string", "string", ...]}'
+        )
+
+    return instance
+
+
+def update_user_apps(user_json):
+    user_permissions = user_json['app_metadata']['permissions']
+
+    for app_id in user_permissions:
+        app = App.objects.get(app_id=app_id)
+
+
+
