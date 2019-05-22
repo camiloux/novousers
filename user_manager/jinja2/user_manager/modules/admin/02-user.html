@@ -86,7 +86,6 @@
                     if (!this.userApps.hasOwnProperty(app.app_id)) {
                         this.$set(this.userApps, app.app_id, -1);
                     } else {
-                        console.log('ENTRA', this.userApps[app.app_id], permissions[this.userApps[app.app_id]].role);
                         app.selected_role = permissions[this.userApps[app.app_id]].role;
                     }
                 }, this);
@@ -147,6 +146,7 @@
 
                     if (appIndex > -1) {
                         permissions.splice(appIndex, 1);
+                        this.userApps[app.app_id] = -1;
                     } else {
                         this.userApps[app.app_id] = permissions.length;
                         permissions.push({

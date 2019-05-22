@@ -21,13 +21,16 @@ APP_ENDPOINT_CREATE_USER = '/create-user'
 APP_ENDPOINT_DELETE_USER = '/delete-user'
 
 
-def get_token():
+def get_token(no_scopes=False):
     payload = {
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET,
         'audience': AUDIENCE,
         'grant_type': GRANT_TYPE,
     }
+
+    if no_scopes:
+        payload['scope'] = []
 
     full_url = f"https://{ENDPOINT}{TOKEN_API}"
     response = requests.post(full_url, json=payload)
@@ -67,7 +70,7 @@ def get_all_users():
     return auth0_request('GET', f'/api/v2/users?fields={fields}')
 
 
-def get_user_by_username(user_id):
+def get_user_by_user_id(user_id):
     fields = 'user_id,username,email,email_verified,user_metadata,app_metadata'
     return auth0_request('GET', f'/api/v2/users/{user_id}?fields={fields}')
 
@@ -96,7 +99,7 @@ def request_password_reset(username, email):
 
 
 def get_app_data(instance):
-    token = get_token()
+    token = get_token(no_scopes=True)
     app_data_response, code = authorized_request('GET', instance.endpoint + APP_ENDPOINT_GET_DATA, token=token)
     if code != 200:
         raise ValidationError('Endpoint is not configured properly.')
@@ -115,11 +118,33 @@ def get_app_data(instance):
     return instance
 
 
-def update_user_apps(user_json):
+def update_user_apps(user_json, original_user_json=None):
     user_permissions = user_json['app_metadata']['permissions']
+    to_remove_apps = set()
+    token = get_token(no_scopes=True)
 
-    for app_id in user_permissions:
+    if original_user_json:
+        old_permissions = original_user_json['app_metadata']['permissions']
+
+        for op in old_permissions:
+            to_remove_apps.add(op['app'])
+
+    for app_dict in user_permissions:
+        app = App.objects.get(app_id=app_dict['app'])
+        try:
+            to_remove_apps.remove(app.app_id)
+        except KeyError:
+            pass
+        data = {
+            'username': user_json['username'],
+            'email': user_json['email'],
+            'role': app_dict['role'],
+            'user_metadata': user_json['user_metadata']
+        }
+        authorized_request('POST', app.endpoint + APP_ENDPOINT_CREATE_USER, payload=data, token=token)
+
+    for app_id in to_remove_apps:
         app = App.objects.get(app_id=app_id)
+        data = {'username': user_json['username']}
 
-
-
+        authorized_request('POST', app.endpoint + APP_ENDPOINT_DELETE_USER, payload=data, token=token)

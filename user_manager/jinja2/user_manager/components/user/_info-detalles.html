@@ -33,7 +33,7 @@
         <ul class="list-selection list-inline">
             <li class="list-inline-item" v-for="app in selectedApps" :class="{selected: app.selected}"
                 @click="setAppSelected(app, 'r')">
-                [[ app.app_name ]]
+                [[ app.app_name ]]<span v-if="app.selected_role"> ([[ app.selected_role ]])</span>
             </li>
         </ul>
     </div>

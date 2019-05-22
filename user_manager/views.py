@@ -9,8 +9,8 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import View
 
-from user_manager.auth0utils import get_all_users, get_user_by_username, DEFAULT_DB_CONNECTION, create_user, \
-    patch_user, delete_user, request_password_reset
+from user_manager.auth0utils import get_all_users, get_user_by_user_id, DEFAULT_DB_CONNECTION, create_user, \
+    patch_user, delete_user, request_password_reset, update_user_apps
 from user_manager.utils import get_apps_list, get_profiles
 
 
@@ -59,7 +59,7 @@ class ViewUser(AuthView):
     def get(self, request):
         username = request.GET.get('user_id', None)
         if username:
-            data, code = get_user_by_username(username)
+            data, code = get_user_by_user_id(username)
             profiles = get_profiles()
             return render(request, 'user_manager/modules/admin/02-user.html', {
                 'data': mark_safe(data), 'apps': get_apps_list(), 'profiles': profiles
@@ -68,20 +68,31 @@ class ViewUser(AuthView):
 
     def post(self, request):
         try:
-            json_data = json.loads(request.POST.get('user_data'))
-            user_id = json_data['user_id']
-            del json_data['username']
-            del json_data['user_id']
-            del json_data['email']
-            del json_data['email_verified']
-        except json.decoder.JSONDecodeError:
-            return redirect(f'{request.path}?user_id={user_id}')
+            user_json = json.loads(request.POST.get('user_data'))
+            data, code = get_user_by_user_id(user_json['user_id'])
+            original_user = json.loads(data)
 
-        response, status = patch_user(json_data, user_id)
-        if status == 200:
-            messages.add_message(request, messages.SUCCESS, 'Usuario actualizado', extra_tags='alert-success')
-        else:
-            messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
+            user_id = user_json['user_id']
+
+            if original_user == user_json:
+                messages.add_message(request, messages.WARNING, 'No se ha realizado ningín cambio',
+                                     extra_tags='alert-warning')
+            else:
+                to_update_data = {
+                    'app_metadata': user_json['app_metadata'], 'user_metadata': user_json['user_metadata']
+                }
+                response, status = patch_user(to_update_data, user_id)
+
+                if status == 200:
+                    update_user_apps(user_json, original_user)
+                    messages.add_message(request, messages.SUCCESS, 'Usuario actualizado', extra_tags='alert-success')
+                else:
+                    messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}',
+                                         extra_tags='alert-danger')
+
+        except json.decoder.JSONDecodeError:
+            messages.add_message(request, messages.ERROR, 'Error en la solicitud', extra_tags='alert-success')
+            return redirect(request.path)
 
         return redirect(f'{request.path}?user_id={user_id}')
 
