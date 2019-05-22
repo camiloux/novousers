@@ -14,6 +14,7 @@ def get_apps_list():
             'app_name': app['app_name'],
             'app_id': app['app_id'],
             'roles': app['roles'].split(','),
+            'selected': False,
             'selected_role': ''
         }
         app_list.append(app_dict)
