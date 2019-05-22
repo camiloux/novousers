@@ -5,7 +5,7 @@
             <div class="form-group col-auto" v-for="role in app.roles">
                 <div class="radio">
                     <label>
-                        <input type="radio" v-model="app.selected_role" :value="role" @change="changeAppRole(app, role)" name="role"> [[ role ]]
+                        <input type="radio" v-model="app.selected_role" :value="role" @change="changeAppRole(app, role)" :name="'role-' + app.app_id"> [[ role ]]
                     </label>
                 </div>
             </div>

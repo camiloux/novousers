@@ -108,7 +108,7 @@ def get_app_data(instance):
     try:
         instance.app_name = app_data['name']
         instance.app_id = app_data['id']
-        instance.roles_list = ','.join(app_data['roles'])
+        instance.roles = ','.join(app_data['roles'])
     except (KeyError, TypeError):
         raise ValidationError(
             'Endpoint get-app-data must return a JSON with the following structure:'
