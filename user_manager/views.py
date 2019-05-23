@@ -128,7 +128,7 @@ class CreateUser(View):
         try:
             json_data = json.loads(request.POST.get('user_data'))
             json_data['connection'] = DEFAULT_DB_CONNECTION
-            json_data['email_verified'] = False
+            json_data['email_verified'] = True
             json_data['password'] = str(uuid4())
         except json.decoder.JSONDecodeError:
             messages.add_message(request, messages.ERROR,
@@ -137,8 +137,9 @@ class CreateUser(View):
             return redirect(request.path)
         response, status = create_user(json_data)
         result = json.loads(response)
-        if status == 201 or status == 200:
+        if status == 201:
             messages.add_message(request, messages.SUCCESS, 'Usuario creado', extra_tags='alert-success')
+            request_password_reset(json_data['username'], json_data['email'])
             return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")
         else:
             messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
