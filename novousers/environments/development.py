@@ -18,5 +18,4 @@ DATABASES = {
     }
 }
 
-
 LOGGING = DEFAULT_LOGGING
