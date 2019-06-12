@@ -27,7 +27,7 @@ SECRET_KEY = '1$ual4r$=_i$^e5mcfj!n))g!92fhxz0-v98#3^j!f@lx-cajc'
 DEBUG = env.DEBUG
 
 ALLOWED_HOSTS = env.ALLOWED_HOSTS
-SSL_REDIRECT = env.SSL_REDIRECT
+SECURE_SSL_REDIRECT = env.SECURE_SSL_REDIRECT
 
 # Application definition
 

@@ -3,7 +3,7 @@ from django.utils.log import DEFAULT_LOGGING
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
-SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = False
 
 SITE_URL = 'http://3.217.72.41'
 

@@ -1,7 +1,7 @@
 from django.utils.log import DEFAULT_LOGGING
 
 DEBUG = True
-SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = True
 
 ALLOWED_HOSTS = ['usuarios.nnco.cloud']
 
