@@ -1,7 +1,9 @@
-DEBUG = False
-SSL_REDIRECT = True
+from django.utils.log import DEFAULT_LOGGING
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '3.217.72.41']
+DEBUG = True
+SSL_REDIRECT = False
+
+ALLOWED_HOSTS = ['usuarios.nnco.cloud']
 
 DATABASES = {
     'default': {
@@ -14,4 +16,19 @@ DATABASES = {
     }
 }
 
-SITE_URL = 'http://3.217.72.41'
+SITE_URL = 'https://usuarios.nnco.cloud'
+
+LOGGING = DEFAULT_LOGGING
+LOGGING['handlers']['slack_admins'] = {
+    'level': 'ERROR',
+    'filters': ['require_debug_false'],
+    'class': 'novousers.slack_logger.SlackExceptionHandler',
+}
+LOGGING['loggers']['django.security.DisallowedHost'] = {
+    'handlers': [],
+    'propagate': False,
+}
+LOGGING['loggers']['django'] = {
+    'handlers': ['console', 'mail_admins', 'slack_admins'],
+    'level': 'INFO',
+}

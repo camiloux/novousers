@@ -1,7 +1,11 @@
+from django.utils.log import DEFAULT_LOGGING
+
 DEBUG = True
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 SSL_REDIRECT = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '3.217.72.41', 'usuarios.nnco.cloud']
+SITE_URL = 'http://3.217.72.41'
 
 DATABASES = {
     'default': {
@@ -14,4 +18,5 @@ DATABASES = {
     }
 }
 
-SITE_URL = 'http://3.217.72.41'
+
+LOGGING = DEFAULT_LOGGING
