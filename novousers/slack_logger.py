@@ -133,7 +133,7 @@ class SlackExceptionHandler(AdminEmailHandler):
         }
 
         # setup channel webhook
-        webhook_url = 'https://hooks.slack.com/services/TD0QBHR29/https://hooks.slack.com/services/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'
+        webhook_url = 'https://hooks.slack.com/services/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'
 
         # send it
         r = requests.post(webhook_url, data=data)
