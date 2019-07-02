@@ -73,7 +73,7 @@ def get_all_users():
 
     users = []
 
-    while length < limit:
+    while length == limit:
         result, status = auth0_request(
             'GET', f'/api/v2/users?fields={fields}&search_engine=v3&page={page}&per_page={limit}&include_totals=true'
         )
