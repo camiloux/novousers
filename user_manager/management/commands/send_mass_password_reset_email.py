@@ -12,7 +12,7 @@ class Command(BaseCommand):
         emails_sent = 0
 
         for user in users:
-            self.stdout.write(user)
+            self.stdout.write(str(user))
             # result, status = request_password_reset(user['username'], user['email'])
             # if status == 200:
             #     emails_sent += 1
