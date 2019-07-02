@@ -69,7 +69,7 @@ def get_all_users():
     fields = 'user_id,username,email,user_metadata,app_metadata'
     page = 0
     limit = 100
-    length = 0
+    length = 100
 
     users = []
 
