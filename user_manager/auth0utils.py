@@ -67,7 +67,25 @@ def auth0_request(method, url, payload=None):
 
 def get_all_users():
     fields = 'user_id,username,email,user_metadata,app_metadata'
-    return auth0_request('GET', f'/api/v2/users?fields={fields}')
+    page = 0
+    limit = 100
+    length = 0
+
+    users = []
+
+    while length < limit:
+        result, status = auth0_request(
+            'GET', f'/api/v2/users?fields={fields}&search_engine=v3&page={page}&per_page={limit}&include_totals=true'
+        )
+        page += 1
+        if status == 200:
+            json_data = json.loads(result)
+            limit = json_data['limit']
+            length = json_data['length']
+            users += json_data['users']
+        else:
+            return []
+    return users
 
 
 def get_user_by_user_id(user_id):
