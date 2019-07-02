@@ -84,7 +84,7 @@ def get_all_users():
             length = json_data['length']
             users += json_data['users']
         else:
-            return []
+            pass
     return users
 
 
