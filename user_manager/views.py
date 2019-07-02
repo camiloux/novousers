@@ -49,9 +49,9 @@ class AuthView(View):
 
 class Index(AuthView):
     def get(self, request):
-        users, code = get_all_users()
+        users = get_all_users()
         return render(request, 'user_manager/modules/admin/01-user-list.html', {
-            'users': mark_safe(users), 'profiles': get_profiles(), 'apps': get_apps_list()
+            'users': mark_safe(json.dumps(users)), 'profiles': get_profiles(), 'apps': get_apps_list()
         })
 
 
