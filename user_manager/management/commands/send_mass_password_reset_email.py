@@ -12,15 +12,15 @@ class Command(BaseCommand):
         emails_sent = 0
 
         for user in users:
-            self.stdout.write(str(user))
-            # result, status = request_password_reset(user['username'], user['email'])
-            # if status == 200:
-            #     emails_sent += 1
-            # else:
-            #     users_with_errors.append('{} - {}'.format(user, result))
+            # self.stdout.write(str(user))
+            result, status = request_password_reset(user['username'], user['email'])
+            if status == 200:
+                emails_sent += 1
+            else:
+                users_with_errors.append('{} - {}'.format(user, result))
 
         if len(users_with_errors) > 0:
             self.stdout.write('Could not send reset email to {} users'.format(len(users_with_errors)))
             for u in users_with_errors:
                 self.stdout.write(u)
-        self.stdout.write('{} email{} sent.'.format(emails_sent, '' if emails_sent == 1 else ''))
+        self.stdout.write('{} email{} sent.'.format(emails_sent, '' if emails_sent == 1 else 's'))
