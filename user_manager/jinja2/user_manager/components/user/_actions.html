@@ -23,6 +23,15 @@
         <div class="btn btn-outline-primary" @click="confirmDeleteUser">Eliminar usuario</div>
     </form>
 </div>
+
+{% if not creating %}
+<div class="form-group col-auto offset-3">
+    <a href="{{ url('user_manager:create-user') }}" class="btn btn-outline-primary">
+        <i class="fal fa-plus"></i>Crear nuevo usuario
+    </a>
+</div>
+{% endif %}
+
 {% endset %}
 
 <div class="block">
