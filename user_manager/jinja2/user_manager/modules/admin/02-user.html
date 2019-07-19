@@ -96,6 +96,9 @@
                     if (newValue) {
                         this.user.user_metadata.profile = newValue.name;
                     }
+                },
+                'user.username': function (value) {
+                    this.user.email = value + '@novonordisk.com'
                 }
             },
             computed: {

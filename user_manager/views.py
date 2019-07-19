@@ -138,9 +138,11 @@ class CreateUser(View):
         response, status = create_user(json_data)
         result = json.loads(response)
         if status == 201:
-            messages.add_message(request, messages.SUCCESS, 'Usuario creado', extra_tags='alert-success')
+            messages.add_message(request, messages.SUCCESS, f"Usuario \"{json_data['username']}\" creado",
+                                 extra_tags='alert-success')
             request_password_reset(json_data['username'], json_data['email'])
-            return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")
+            return redirect('user_manager:create-user')
+            # return redirect(f"{reverse('user_manager:view-user')}?user_id={result['user_id']}")
         else:
             messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}', extra_tags='alert-danger')
             return redirect('user_manager:create-user')
