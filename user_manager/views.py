@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.views import View
 
 from user_manager.auth0utils import get_all_users, get_user_by_user_id, DEFAULT_DB_CONNECTION, create_user, \
-    patch_user, delete_user, request_password_reset, update_user_apps
+    patch_user, delete_user, request_password_reset, update_user_apps, get_all_users_cached, clear_cache
 from user_manager.utils import get_apps_list, get_profiles
 
 
@@ -49,7 +49,9 @@ class AuthView(View):
 
 class Index(AuthView):
     def get(self, request):
-        users = get_all_users()
+        users = get_all_users_cached()
+        if not users:
+            users = get_all_users()
         return render(request, 'user_manager/modules/admin/01-user-list.html', {
             'users': mark_safe(json.dumps(users)), 'profiles': get_profiles(), 'apps': get_apps_list()
         })
@@ -82,6 +84,7 @@ class ViewUser(AuthView):
                     'app_metadata': user_json['app_metadata'], 'user_metadata': user_json['user_metadata']
                 }
                 response, status = patch_user(to_update_data, user_id)
+                update_cached_user(user_id, user_json['app_metadata'], user_json['user_metadata'])
 
                 if status == 200:
                     update_user_apps(user_json, original_user)
@@ -101,6 +104,7 @@ class DeleteUser(AuthView):
     def post(self, request):
         user_id = request.POST.get('user_id')
         response, status = delete_user(user_id)
+        clear_cache()
         if status == 204:
             messages.add_message(request, messages.SUCCESS, 'Usuario eliminado', extra_tags='alert-success')
         else:
@@ -119,6 +123,7 @@ class CreateUser(View):
         }
         data = json.dumps(user)
         profiles = get_profiles()
+        clear_cache()
 
         return render(request, 'user_manager/modules/admin/02-user.html', {
             'data': mark_safe(data), 'apps': get_apps_list(), 'creating': True, 'profiles': profiles

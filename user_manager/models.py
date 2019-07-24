@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -42,3 +43,15 @@ class AppRole(models.Model):
     class Meta:
         verbose_name = 'Rol en la app'
         verbose_name_plural = 'Roles en la app'
+
+
+class UserCache(models.Model):
+    users_json = JSONField(verbose_name='Caché de usuarios', blank=True, null=True, default=None)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Última actualización')
+
+    def __str__(self):
+        return f"Cache creado en {self.updated_at.strftime('%d/%m/%Y')}"
+
+    class Meta:
+        verbose_name = 'Cache de usuarios'
+        verbose_name_plural = 'Caches de usuarios'

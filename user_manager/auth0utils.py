@@ -2,7 +2,7 @@ import json
 import requests
 from django.core.exceptions import ValidationError
 
-from user_manager.models import App
+from user_manager.models import App, UserCache
 
 ENDPOINT = 'novonordiskco.auth0.com'
 CLIENT_ID = 'gS1tvn8zGmF3pcDrwmEtWOixPe846ATL'
@@ -85,7 +85,27 @@ def get_all_users():
             users += json_data['users']
         else:
             pass
+
+    cache, c = UserCache.objects.get_or_create(id=1)
+    cache.users_json = users
+    cache.save()
+
     return users
+
+
+def get_all_users_cached():
+    cache: UserCache = UserCache.objects.filter(users_json__isnull=False).first()
+    if cache:
+        return cache.users_json
+    else:
+        return None
+
+
+def clear_cache():
+    cache: UserCache = UserCache.objects.filter(users_json__isnull=False).first()
+    if cache:
+        cache.users_json = None
+        cache.save()
 
 
 def get_user_by_user_id(user_id):
@@ -166,3 +186,22 @@ def update_user_apps(user_json, original_user_json=None):
         data = {'username': user_json['username']}
 
         authorized_request('POST', app.endpoint + APP_ENDPOINT_DELETE_USER, payload=data, token=token)
+
+
+def update_cached_user(user_id, app_metadata, user_metadata):
+    cache = UserCache.objects.first()
+    if not cache:
+        return
+    users = cache.users_json
+    changed = False
+
+    for u in users:
+        if u.get('user_id') == user_id:
+            u['app_metadata'] = app_metadata
+            u['user_metadata'] = user_metadata
+            changed = True
+            break
+
+    if changed:
+        cache.users_json = users
+        cache.save()
