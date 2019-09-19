@@ -178,11 +178,6 @@ class ResetPassword(AuthView):
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginLogView(View):
     def get(self, request):
-        insert_document(login_logs_collection, {
-            'username': 'test',
-            'application': 'test',
-            'date_time': now(),
-        })
         return JsonResponse(get_documents(login_logs_collection, {}, {'_id': 0, 'date_time': 0}))
 
     def post(self, request):
