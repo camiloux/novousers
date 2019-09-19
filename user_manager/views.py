@@ -181,9 +181,9 @@ class LoginLogView(View):
         insert_document(login_logs_collection, {
             'username': 'test',
             'application': 'test',
-            'date_time': now().strftime('%Y-%m-%d'),
+            'date_time': now(),
         })
-        return JsonResponse(get_documents(login_logs_collection, {}))
+        return JsonResponse(get_documents(login_logs_collection, {}, {'_id': 0}))
 
     def post(self, request):
         body_unicode = request.body.decode('utf-8')
@@ -195,7 +195,7 @@ class LoginLogView(View):
             insert_document(login_logs_collection, {
                 'username': username,
                 'application': application,
-                'date_time': now().strftime('%Y-%m-%d'),
+                'date_time': now(),
             })
 
         return JsonResponse({'status': 'ok'})

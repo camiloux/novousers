@@ -8,6 +8,6 @@ def insert_document(collection_name, new_document):
     collection.insert_one(new_document)
 
 
-def get_documents(collection_name, filter_object):
+def get_documents(collection_name, filter_object, projection_object):
     collection: Collection = mongo_db[collection_name]
-    return collection.find(filter_object)
+    return collection.find(filter_object, projection_object)
