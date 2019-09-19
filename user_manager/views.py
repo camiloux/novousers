@@ -3,16 +3,20 @@ from uuid import uuid4
 
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
+from django.utils.timezone import now
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
+from novousers.settings import login_logs_collection
 from user_manager.auth0utils import get_all_users, get_user_by_user_id, DEFAULT_DB_CONNECTION, create_user, \
     patch_user, delete_user, request_password_reset, update_user_apps, get_all_users_cached, clear_cache, \
     update_cached_user
-from user_manager.utils import get_apps_list, get_profiles
+from user_manager.utils import get_apps_list, get_profiles, get_documents, insert_document
 
 
 class Login(View):
@@ -169,3 +173,29 @@ class ResetPassword(AuthView):
         if user_id:
             return redirect(reverse('user_manager:view-user') + '?user_id=' + user_id)
         return redirect('user_manager:login')
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LoginLogView(View):
+    def get(self, request):
+        insert_document(login_logs_collection, {
+            'username': 'test',
+            'application': 'test',
+            'date_time': now().strftime('%Y-%m-%d'),
+        })
+        return JsonResponse(get_documents(login_logs_collection, {}))
+
+    def post(self, request):
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+
+        username = body.get('username', '')
+        application = body.get('application', '')
+        if username and application:
+            insert_document(login_logs_collection, {
+                'username': username,
+                'application': application,
+                'date_time': now().strftime('%Y-%m-%d'),
+            })
+
+        return JsonResponse({'status': 'ok'})

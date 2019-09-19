@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+
+from pymongo import MongoClient
+
 from .environments import production as env
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -128,6 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+mongo_client = MongoClient('localhost', 27017)
+mongo_db = mongo_client.novonordisk_login_logs_db
+login_logs_collection = 'login_logs'
 
 SITE_URL = env.SITE_URL
 
