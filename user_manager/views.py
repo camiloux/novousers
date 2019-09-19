@@ -183,7 +183,7 @@ class LoginLogView(View):
             'application': 'test',
             'date_time': now(),
         })
-        return JsonResponse(get_documents(login_logs_collection, {}, {'_id': 0}))
+        return JsonResponse(get_documents(login_logs_collection, {}, {'_id': 0, 'date_time': 0}))
 
     def post(self, request):
         body_unicode = request.body.decode('utf-8')
