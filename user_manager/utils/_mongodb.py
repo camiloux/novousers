@@ -21,6 +21,6 @@ def insert_document(collection_name, new_document):
     collection.insert_one(new_document)
 
 
-def get_documents(collection_name, filter_object, projection_object):
+def get_documents(collection_name, filter_object):
     collection: Collection = mongo_db[collection_name]
-    return [d for d in collection.find(filter_object, projection_object)]
+    return [d for d in collection.find(filter_object)]

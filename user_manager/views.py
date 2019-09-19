@@ -179,7 +179,7 @@ class ResetPassword(AuthView):
 class LoginLogView(View):
     def get(self, request):
         return JsonResponse(
-            get_documents(login_logs_collection, {}, {}),
+            get_documents(login_logs_collection, {}),
             safe=False,
             encoder=MongoJSONEncoder
         )
