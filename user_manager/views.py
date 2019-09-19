@@ -16,7 +16,7 @@ from novousers.settings import login_logs_collection
 from user_manager.auth0utils import get_all_users, get_user_by_user_id, DEFAULT_DB_CONNECTION, create_user, \
     patch_user, delete_user, request_password_reset, update_user_apps, get_all_users_cached, clear_cache, \
     update_cached_user
-from user_manager.utils import get_apps_list, get_profiles, get_documents, insert_document
+from user_manager.utils import get_apps_list, get_profiles, get_documents, insert_document, MongoJSONEncoder
 
 
 class Login(View):
@@ -178,7 +178,11 @@ class ResetPassword(AuthView):
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginLogView(View):
     def get(self, request):
-        return JsonResponse(get_documents(login_logs_collection, {}, {'_id': 0, 'date_time': 0}))
+        return JsonResponse(
+            get_documents(login_logs_collection, {}, {}),
+            safe=False,
+            encoder=MongoJSONEncoder
+        )
 
     def post(self, request):
         body_unicode = request.body.decode('utf-8')
