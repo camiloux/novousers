@@ -175,6 +175,14 @@ class ResetPassword(AuthView):
         return redirect('user_manager:login')
 
 
+class ReportsView(AuthView):
+    def get(self, request):
+        return render(request, 'user_manager/modules/admin/03-reports.html', {
+            'apps': get_apps_list(),
+            'login_logs': mark_safe(json.dumps(get_documents(login_logs_collection, {}), cls=MongoJSONEncoder))
+        })
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginLogView(View):
     def get(self, request):

@@ -1,0 +1,76 @@
+{% extends 'user_manager/partials/base.html' %}
+{% import 'user_manager/_bpm/naui-page.html' as page %}
+
+{% block header %}
+    <h3 class="page-title">
+        Reporte usuarios
+    </h3>
+{% endblock %}
+
+{% block main %}
+    {# Incluir componentes #}
+    {% include 'user_manager/components/reports/_filters.html' %}
+    {% include 'user_manager/components/reports/_table.html' %}
+{% endblock %}
+
+{% block bottom %}
+    <script>
+        new Vue({
+            el: '#main-app',
+            data: {
+                apps: {{ apps|tojson }},
+                loginLogs: {{ login_logs }},
+                searchWord: '',
+                filters: {
+                    app: ''
+                }
+            },
+            computed: {
+                filteredLoginLogs: function () {
+                    var filteredLogs = this.loginLogs;
+                    var self = this;
+                    if (this.filters.app) {
+                        filteredLogs = filteredLogs.filter(function (user) {
+                            var userPermissions = user.hasOwnProperty('app_metadata') ?
+                                user.app_metadata.permissions : [];
+                            if (userPermissions !== null) {
+                                for (var i = 0; i < userPermissions.length; i++) {
+                                    console.log('APP', userPermissions[i].app, self.filters.app);
+                                    if (userPermissions[i].app === self.filters.app.app_id) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        });
+                    }
+                    if (this.searchWord) {
+                        filteredLogs = filteredLogs.filter(function (user) {
+                            return !!(
+                                self.checkSubString(user.username) ||
+                                self.checkSubString(user.email) ||
+                                self.checkSubString(self.getUserMeta(user, 'first_name')) ||
+                                self.checkSubString(self.getUserMeta(user, 'last_name'))
+                            );
+
+                        });
+                    }
+                    return filteredLogs;
+                }
+            },
+            methods: {
+                toNovonordiskEmail(username) {
+                    return username.toUpperCase()+'@novonordisk.com';
+                },
+                formatDate(isoDate){
+                    var d = new Date(isoDate);
+                    return d.toLocaleDateString();
+                },
+                checkSubString(string) {
+                    var ret = string.toLowerCase().indexOf(this.searchWord.toLowerCase());
+                    return ret > -1;
+                }
+            }
+        })
+    </script>
+{% endblock %}

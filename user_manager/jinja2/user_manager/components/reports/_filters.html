@@ -1,0 +1,36 @@
+{% import 'user_manager/_bpm/naui-fields.html' as naui_f %}
+{% import 'user_manager/_bpm/naui-actions.html' as naui_a %}
+
+<div class="block">
+    <fieldset>
+        <div class="form-row">
+
+        </div>
+        <div class="form-row">
+            {{ naui_f.vue_select(label='Aplicación',name='aplicacion',options='apps', class='col-md-2', display='app_name',vmodel='filters.app') }}
+            <div class="form-group col-md-2">
+                <label for="from_date">Fecha inicial</label>
+                <div class="input-group">
+                    <input type="date" class="form-control" name="from_date" id="from_date">
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="to_date">Fecha final</label>
+                <div class="input-group">
+                    <input type="date" class="form-control" name="to_date" id="to_date">
+                </div>
+            </div>
+            <div class="form-group col">
+                <label>Realice la búsqueda por nombre de usuario o correo</label>
+                <div class="input-group">
+                    <input class="form-control" name="search" id="search" placeholder="Buscar">
+                    <div class="input-group-append">
+                    <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

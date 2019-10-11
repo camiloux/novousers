@@ -27,7 +27,8 @@
 
 {% block aside %}
     {% set modules=[
-    {'name':'Gestión de usuarios','href':'/'}
+    {'name':'Gestión de usuarios', 'href': url('user_manager:index')},
+    {'name':'Reporte usuarios', 'href': url('user_manager:reports')}
     ] %}
     {{ page.aside(modules=modules) }}
 {% endblock %}
