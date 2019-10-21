@@ -1,11 +1,14 @@
+import csv
 import json
+from codecs import BOM_UTF8
 from uuid import uuid4
 
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
@@ -16,6 +19,7 @@ from novousers.settings import login_logs_collection
 from user_manager.auth0utils import get_all_users, get_user_by_user_id, DEFAULT_DB_CONNECTION, create_user, \
     patch_user, delete_user, request_password_reset, update_user_apps, get_all_users_cached, clear_cache, \
     update_cached_user
+from user_manager.models import App
 from user_manager.utils import get_apps_list, get_profiles, get_documents, insert_document, MongoJSONEncoder
 
 
@@ -178,16 +182,48 @@ class ResetPassword(AuthView):
 class ReportsView(AuthView):
     def get(self, request):
         return render(request, 'user_manager/modules/admin/03-reports.html', {
-            'apps': get_apps_list(),
-            'login_logs': mark_safe(json.dumps(get_documents(login_logs_collection, {}), cls=MongoJSONEncoder))
+            'apps': get_apps_list()
         })
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginLogView(View):
     def get(self, request):
+        app = request.GET.get('application', '')
+        date_from = request.GET.get('from', '')
+        date_to = request.GET.get('to', '')
+        search = request.GET.get('search', '')
+
+        filter_object = {}
+
+        if app:
+            filter_object['application'] = app
+
+        if date_from or date_to:
+            datetime_from = None
+            datetime_to = None
+
+            try:
+                datetime_from = datetime.strptime(date_from, '%Y-%m-%d')
+            except:
+                pass
+            try:
+                datetime_to = datetime.strptime(date_to, '%Y-%m-%d')
+            except:
+                pass
+
+            if datetime_from or datetime_to:
+                filter_object['date_time'] = {}
+                if datetime_from:
+                    filter_object['date_time']['$gte'] = datetime_from
+                if datetime_to:
+                    filter_object['date_time']['$lte'] = datetime_to
+
+        if search:
+            filter_object['username'] = {'$regex': f'.*{search}.*', '$options': 'i'}
+
         return JsonResponse(
-            get_documents(login_logs_collection, {}),
+            get_documents(login_logs_collection, filter_object),
             safe=False,
             encoder=MongoJSONEncoder
         )
@@ -206,3 +242,62 @@ class LoginLogView(View):
             })
 
         return JsonResponse({'status': 'ok'})
+
+
+class DownloadLoginLogReportView(View):
+    def get(self, request):
+        app_mapper = {}
+        applications = App.objects.all()
+        for a in applications:
+            app_mapper[a.app_id] = a.app_name
+
+        app = request.GET.get('application', '')
+        date_from = request.GET.get('from', '')
+        date_to = request.GET.get('to', '')
+        search = request.GET.get('search', '')
+
+        filter_object = {}
+
+        if app:
+            filter_object['application'] = app
+
+        if date_from or date_to:
+            datetime_from = None
+            datetime_to = None
+
+            try:
+                datetime_from = datetime.strptime(date_from, '%Y-%m-%d')
+            except:
+                pass
+            try:
+                datetime_to = datetime.strptime(date_to, '%Y-%m-%d')
+            except:
+                pass
+
+            if datetime_from or datetime_to:
+                filter_object['date_time'] = {}
+                if datetime_from:
+                    filter_object['date_time']['$gte'] = datetime_from
+                if datetime_to:
+                    filter_object['date_time']['$lte'] = datetime_to
+
+        if search:
+            filter_object['username'] = {'$regex': f'.*{search}.*', '$options': 'i'}
+
+        login_logs = get_documents(login_logs_collection, filter_object)
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="reporte.csv"'
+
+        writer = csv.writer(response, csv.excel)
+        response.write(BOM_UTF8)
+        writer.writerow(['Nombre de usuario', 'Aplicación', 'Fecha de ingreso'])
+        for login_log in login_logs:
+            writer.writerow([
+                login_log['username'],
+                app_mapper.get(login_log['application'], login_log['application']),
+                login_log['date_time'].strftime('%Y-%m-%d')
+            ])
+
+
+        return response

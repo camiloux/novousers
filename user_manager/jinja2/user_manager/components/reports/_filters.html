@@ -7,26 +7,27 @@
 
         </div>
         <div class="form-row">
-            {{ naui_f.vue_select(label='Aplicación',name='aplicacion',options='apps', class='col-md-2', display='app_name',vmodel='filters.app') }}
+            {{ naui_f.vue_select(label='Aplicación',name='aplicacion',options='apps', class='col-md-2', display='app_name',vmodel='filters.app', vchange='getLoginLogs()') }}
             <div class="form-group col-md-2">
                 <label for="from_date">Fecha inicial</label>
                 <div class="input-group">
-                    <input type="date" class="form-control" name="from_date" id="from_date">
+                    <input type="date" class="form-control" name="from_date" id="from_date"
+                           @change="changeFromDate($event)">
                 </div>
             </div>
             <div class="form-group col-md-2">
                 <label for="to_date">Fecha final</label>
                 <div class="input-group">
-                    <input type="date" class="form-control" name="to_date" id="to_date">
+                    <input type="date" class="form-control" name="to_date" id="to_date" @change="changeToDate($event)">
                 </div>
             </div>
             <div class="form-group col">
-                <label>Realice la búsqueda por nombre de usuario o correo</label>
+                <label>Realice la búsqueda por nombre de usuario</label>
                 <div class="input-group">
-                    <input class="form-control" name="search" id="search" placeholder="Buscar">
+                    <input class="form-control" name="search" id="search" placeholder="Buscar" v-model="filters.search">
                     <div class="input-group-append">
-                    <span class="input-group-text">
-                    <i class="fa fa-search"></i>
+                        <span class="input-group-text" @click="getLoginLogs()">
+                            <i class="fa fa-search"></i>
                         </span>
                     </div>
                 </div>

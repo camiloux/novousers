@@ -10,53 +10,37 @@
 {% block main %}
     {# Incluir componentes #}
     {% include 'user_manager/components/reports/_filters.html' %}
+
+    <template v-if="loginLogs.length > 0">
+        <div class="block">
+            <a class="btn btn-outline-primary" :href="makeLinkToDownloadReport()" download>
+                <i class="fa fa-download"></i>
+                Descargar reporte CSV
+            </a>
+        </div>
+    </template>
+
     {% include 'user_manager/components/reports/_table.html' %}
 {% endblock %}
 
 {% block bottom %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         new Vue({
             el: '#main-app',
             data: {
                 apps: {{ apps|tojson }},
-                loginLogs: {{ login_logs }},
+                loginLogs: [],
                 searchWord: '',
                 filters: {
-                    app: ''
+                    app: '',
+                    from: '',
+                    to: '',
+                    search: ''
                 }
             },
-            computed: {
-                filteredLoginLogs: function () {
-                    var filteredLogs = this.loginLogs;
-                    var self = this;
-                    if (this.filters.app) {
-                        filteredLogs = filteredLogs.filter(function (user) {
-                            var userPermissions = user.hasOwnProperty('app_metadata') ?
-                                user.app_metadata.permissions : [];
-                            if (userPermissions !== null) {
-                                for (var i = 0; i < userPermissions.length; i++) {
-                                    console.log('APP', userPermissions[i].app, self.filters.app);
-                                    if (userPermissions[i].app === self.filters.app.app_id) {
-                                        return true;
-                                    }
-                                }
-                            }
-                            return false;
-                        });
-                    }
-                    if (this.searchWord) {
-                        filteredLogs = filteredLogs.filter(function (user) {
-                            return !!(
-                                self.checkSubString(user.username) ||
-                                self.checkSubString(user.email) ||
-                                self.checkSubString(self.getUserMeta(user, 'first_name')) ||
-                                self.checkSubString(self.getUserMeta(user, 'last_name'))
-                            );
-
-                        });
-                    }
-                    return filteredLogs;
-                }
+            mounted: function() {
+                this.getLoginLogs();
             },
             methods: {
                 toNovonordiskEmail(username) {
@@ -69,6 +53,47 @@
                 checkSubString(string) {
                     var ret = string.toLowerCase().indexOf(this.searchWord.toLowerCase());
                     return ret > -1;
+                },
+                changeFromDate(event) {
+                    this.filters.from = event.target.value;
+                    this.getLoginLogs();
+                },
+                changeToDate(event) {
+                    this.filters.to = event.target.value;
+                    this.getLoginLogs();
+                },
+                makeQueryParams() {
+                    var queryParams = [];
+                    if(this.filters.app && this.filters.app.app_id) {
+                        queryParams.push('application=' + this.filters.app.app_id);
+                    }
+
+                    if(this.filters.from) {
+                        queryParams.push('from=' + this.filters.from);
+                    }
+                    if(this.filters.to) {
+                        queryParams.push('to=' + this.filters.to);
+                    }
+
+                    if(this.filters.search) {
+                        queryParams.push('search=' + this.filters.search);
+                    }
+
+                    var queryParamsString = '';
+                    if(queryParams.length > 0){
+                        queryParamsString = '?'+queryParams.join('&');
+                    }
+
+                    return queryParamsString;
+                },
+                getLoginLogs() {
+                    var $this = this;
+                    $.get("{{ url('user_manager:login-log') }}" + $this.makeQueryParams(), function( data ) {
+                        $this.loginLogs = data;
+                    });
+                },
+                makeLinkToDownloadReport() {
+                    return "{{ url('user_manager:download-login-logs-report') }}" + this.makeQueryParams();
                 }
             }
         })

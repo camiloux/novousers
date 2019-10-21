@@ -30,7 +30,7 @@
     {'name':'Gestión de usuarios', 'href': url('user_manager:index')},
     {'name':'Reporte usuarios', 'href': url('user_manager:reports')}
     ] %}
-    {{ page.aside(modules=modules) }}
+    {{ page.aside(modules=modules, current_path=request.path) }}
 {% endblock %}
 
 <main class="naui-content" id="main-app">

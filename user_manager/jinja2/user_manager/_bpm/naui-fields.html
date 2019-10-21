@@ -18,10 +18,10 @@
     </div>
 {% endmacro %}
 
-{% macro vue_select(name,label,options,id,class,display,value,vmodel) %}
+{% macro vue_select(name,label,options,id,class,display,value,vmodel,vchange='') %}
     <div class="form-group {{ class }}">
         <label>{{ label | safe }}</label>
-        <select id="{{ id }}" name="{{ name }}" class="form-control" {% if modo=='disabled' %}disabled{% endif %}{% if vmodel %} v-model="{{ vmodel }}"{% endif %}>
+        <select {% if id %}id="{{ id }}"{% endif %} name="{{ name }}" class="form-control" {% if modo=='disabled' %}disabled{% endif %}{% if vmodel %} v-model="{{ vmodel }}"{% endif %} {% if vchange %}@change="{{ vchange }}"{% endif %}>
             <option value="">N/A</option>
             <option v-for="option in {{ options }}" :value="option{{ '.{}'.format(value) if value else '' }}">
                 [[ option{{ '.{}'.format(display) if display else '' }} ]]
