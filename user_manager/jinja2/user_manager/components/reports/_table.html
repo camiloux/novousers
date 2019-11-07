@@ -7,6 +7,7 @@
 {# THEAD - Se parametriza el head #}
 {% set thead=[
 {'label':'Nombre Usuario','class':'text-left'},
+{'label':'Aplicación','class':'text-center'},
 {'label':'Correo electrónico','class':'text-center'},
 {'label':'Fecha de acceso','class':'text-center'}
 ] %}
@@ -19,6 +20,7 @@
     <template v-for="log in loginLogs">
         <tr>
             <td class="text-center"><span class="naui-date">[[ log.username.toUpperCase() ]]</span></td>
+            <td class="text-center">[[ getApplicationName(log.application) ]]</td>
             <td class="text-center">[[ toNovonordiskEmail(log.username) ]]</td>
             <td class="text-center">[[ formatDate(log.date_time) ]]</td>
         </tr>

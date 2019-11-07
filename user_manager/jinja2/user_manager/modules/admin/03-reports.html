@@ -94,6 +94,14 @@
                 },
                 makeLinkToDownloadReport() {
                     return "{{ url('user_manager:download-login-logs-report') }}" + this.makeQueryParams();
+                },
+                getApplicationName(app_id) {
+                    for(let i=0;i<this.apps.length;i++){
+                        let app = this.apps[i];
+                        if(app.app_id === app_id){
+                            return app.app_name;
+                        }
+                    }
                 }
             }
         })
