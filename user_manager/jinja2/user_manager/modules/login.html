@@ -14,6 +14,9 @@
                     <div class="form-group col-12">
                         <input type="text" class="form-control" placeholder="Digite su usuario" name="username">
                     </div>
+                    <div class="form-group col-12">
+                        <input type="password" placeholder="Digite su contraseña" class="form-control" name="password">
+                    </div>
                     <div class="col-12">
                         {% for message in get_messages(request) %}
                             <div class="alert {{ message.extra_tags }}" onclick="this.parentNode.removeChild(this)">
