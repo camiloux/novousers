@@ -3,3 +3,5 @@ venv
 migrations
 .idea
 __pycache__
+*.sql
+.env

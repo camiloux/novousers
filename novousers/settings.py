@@ -12,13 +12,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from django.utils.log import DEFAULT_LOGGING
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
-from .environments import production as env
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -27,10 +28,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1$ual4r$=_i$^e5mcfj!n))g!92fhxz0-v98#3^j!f@lx-cajc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.DEBUG
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = env.ALLOWED_HOSTS
-SECURE_SSL_REDIRECT = env.SECURE_SSL_REDIRECT
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+SECURE_SSL_REDIRECT = os.environ.get('DEBUG', 'False') == 'True'
 
 # Application definition
 
@@ -82,17 +83,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'novousers.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = env.DATABASES or {
+DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -112,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -126,7 +128,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -136,6 +137,22 @@ mongo_client = MongoClient('localhost', 27017)
 mongo_db = mongo_client.novonordisk_login_logs_db
 login_logs_collection = 'login_logs'
 
-SITE_URL = env.SITE_URL
+SITE_URL = os.environ.get('SITE_URL', '')
 
-LOGGING = env.LOGGING
+SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL', '')
+LOGGING = DEFAULT_LOGGING
+
+if SLACK_WEBHOOK_URL:
+    LOGGING['handlers']['slack_admins'] = {
+        'level': 'ERROR',
+        'filters': ['require_debug_false'],
+        'class': 'novousers.slack_logger.SlackExceptionHandler',
+    }
+    LOGGING['loggers']['django.security.DisallowedHost'] = {
+        'handlers': [],
+        'propagate': False,
+    }
+    LOGGING['loggers']['django'] = {
+        'handlers': ['console', 'mail_admins', 'slack_admins'],
+        'level': 'INFO',
+    }
