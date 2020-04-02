@@ -31,7 +31,7 @@ SECRET_KEY = '1$ual4r$=_i$^e5mcfj!n))g!92fhxz0-v98#3^j!f@lx-cajc'
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
-SECURE_SSL_REDIRECT = os.environ.get('DEBUG', 'False') == 'True'
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'False') == 'True'
 
 # Application definition
 
