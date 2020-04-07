@@ -168,24 +168,29 @@ def update_user_apps(user_json, original_user_json=None):
             to_remove_apps.add(op['app'])
 
     for app_dict in user_permissions:
-        app = App.objects.get(app_id=app_dict['app'])
         try:
-            to_remove_apps.remove(app.app_id)
-        except KeyError:
+            app = App.objects.get(app_id=app_dict['app'])
+            try:
+                to_remove_apps.remove(app.app_id)
+            except KeyError:
+                pass
+            data = {
+                'username': user_json['username'],
+                'email': user_json['email'],
+                'role': app_dict['role'],
+                'user_metadata': user_json['user_metadata']
+            }
+            authorized_request('POST', app.endpoint + APP_ENDPOINT_CREATE_USER, payload=data, token=token)
+        except App.DoesNotExist:
             pass
-        data = {
-            'username': user_json['username'],
-            'email': user_json['email'],
-            'role': app_dict['role'],
-            'user_metadata': user_json['user_metadata']
-        }
-        authorized_request('POST', app.endpoint + APP_ENDPOINT_CREATE_USER, payload=data, token=token)
 
     for app_id in to_remove_apps:
-        app = App.objects.get(app_id=app_id)
-        data = {'username': user_json['username']}
-
-        authorized_request('POST', app.endpoint + APP_ENDPOINT_DELETE_USER, payload=data, token=token)
+        try:
+            app = App.objects.get(app_id=app_id)
+            data = {'username': user_json['username']}
+            authorized_request('POST', app.endpoint + APP_ENDPOINT_DELETE_USER, payload=data, token=token)
+        except App.DoesNotExist:
+            pass
 
 
 def update_cached_user(user_id, app_metadata, user_metadata):
