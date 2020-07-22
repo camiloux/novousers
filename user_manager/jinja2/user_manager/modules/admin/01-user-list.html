@@ -17,6 +17,16 @@
 
     {# Incluir componentes #}
     {% include 'user_manager/components/user-list/_filtros.html' %}
+
+    <template v-if="users.length > 0">
+        <div class="block">
+            <a class="btn btn-outline-primary" :href="makeLinkToDownloadReport()" download>
+                <i class="fa fa-download"></i>
+                Descargar reporte CSV
+            </a>
+        </div>
+    </template>
+
     {% include 'user_manager/components/user-list/_table.html' %}
 
 {% endblock %}
@@ -28,12 +38,19 @@
             data: {
                 profiles: {{ profiles|tojson }},
                 apps: {{ apps|tojson }},
+                appsMapper: {},
                 users: {{ users }},
                 searchWord: '',
                 filters: {
                     profile: '',
                     app: ''
                 }
+            },
+            beforeMount: function() {
+                var self = this;
+                this.apps.forEach((a) => {
+                    self.appsMapper[a.app_id] = a.app_name;
+                });
             },
             computed: {
                 filteredUsers: function () {
@@ -55,7 +72,6 @@
                                 user.app_metadata.permissions : [];
                             if (userPermissions !== null) {
                                 for (var i = 0; i < userPermissions.length; i++) {
-                                    console.log('APP', userPermissions[i].app, self.filters.app);
                                     if (userPermissions[i].app === self.filters.app.app_id) {
                                         return true;
                                     }
@@ -79,6 +95,22 @@
                 }
             },
             methods: {
+                getUserProfile: function(user) {
+                    if (user.hasOwnProperty('app_metadata')) {
+                        if(user.app_metadata.hasOwnProperty('permissions')) {
+                            var response = [];
+                            var self = this;
+                            user.app_metadata.permissions.forEach((p) => {
+                                var appName = self.appsMapper[p.app];
+                                if (appName) {
+                                    response.push(self.appsMapper[p.app] + ': ' + p.role)
+                                }
+                            });
+                            return response.join(' | ');
+                        }
+                    }
+                    return '';
+                },
                 getUserMeta: function (user, attribute) {
                     if (user.hasOwnProperty('user_metadata')) {
                         return user.user_metadata[attribute] || '';
@@ -89,7 +121,26 @@
                 checkSubString(string) {
                     var ret = string.toLowerCase().indexOf(this.searchWord.toLowerCase());
                     return ret > -1;
-                }
+                },
+                makeQueryParams() {
+                    var queryParams = [];
+                    if(this.filters.app && this.filters.app.app_id) {
+                        queryParams.push('application=' + this.filters.app.app_id);
+                    }
+                    if(this.searchWord) {
+                        queryParams.push('word=' + this.searchWord);
+                    }
+
+                    var queryParamsString = '';
+                    if(queryParams.length > 0){
+                        queryParamsString = '?'+queryParams.join('&');
+                    }
+
+                    return queryParamsString;
+                },
+                makeLinkToDownloadReport() {
+                    return "{{ url('user_manager:download-users-report') }}" + this.makeQueryParams();
+                },
             }
         })
     </script>

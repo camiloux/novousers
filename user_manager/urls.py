@@ -15,5 +15,6 @@ urlpatterns = [
 
     path('reportes', views.ReportsView.as_view(), name='reports'),
     path('login-log', views.LoginLogView.as_view(), name='login-log'),
-    path('descargar-reporte-login-logs', views.DownloadLoginLogReportView.as_view(), name='download-login-logs-report')
+    path('descargar-reporte-login-logs', views.DownloadLoginLogReportView.as_view(), name='download-login-logs-report'),
+    path('descargar-reporte-usuarios', views.DownloadUsersReportView.as_view(), name='download-users-report')
 ]

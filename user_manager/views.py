@@ -299,5 +299,67 @@ class DownloadLoginLogReportView(View):
                 login_log['date_time'].strftime('%Y-%m-%d')
             ])
 
+        return response
 
+
+class DownloadUsersReportView(View):
+    def get(self, request):
+        app_mapper = {}
+        applications = App.objects.all()
+        for a in applications:
+            app_mapper[a.app_id] = a.app_name
+
+        app = request.GET.get('application', '')
+        word = request.GET.get('word', '').lower()
+
+        users = get_all_users_cached()
+        if not users:
+            users = get_all_users()
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="reporte-usuarios.csv"'
+
+        writer = csv.writer(response, csv.excel)
+        response.write(BOM_UTF8)
+        writer.writerow(['Nombre', 'Apellido', 'E-mail', 'Username', 'Aplicación', 'Perfil'])
+        for user in users:
+            user_metadata = user.get('user_metadata', {})
+            if user_metadata:
+                first_name = user_metadata.get('first_name', '')
+                last_name = user_metadata.get('last_name', '')
+                email = user.get('email', '')
+                username = user.get('username', '')
+
+                app_metadata = user.get('app_metadata', {})
+                if app_metadata:
+                    permissions = app_metadata.get('permissions', [])
+                    for permission in permissions:
+                        app_id = permission.get('app', '')
+                        app_name = app_mapper.get(app_id, '')
+                        if app_name:
+                            row = [
+                                first_name,
+                                last_name,
+                                email,
+                                username,
+
+                                app_name,
+                                permission.get('role', '')
+                            ]
+                            if app != '' or word != '':
+                                word_condision = (word in first_name.lower()) or \
+                                                 (word in last_name.lower) or \
+                                                 (word in email.lower()) or \
+                                                 (word in username.lower())
+
+                                if app != '' and word != '':
+                                    if app_id == app and word_condision:
+                                        writer.writerow(row)
+                                elif app != '':
+                                    if app_id == app:
+                                        writer.writerow(row)
+                                elif word != '':
+                                    if word_condision:
+                                        writer.writerow(row)
+                            else:
+                                writer.writerow(row)
         return response
