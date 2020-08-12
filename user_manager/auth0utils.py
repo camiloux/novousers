@@ -150,7 +150,8 @@ def get_app_data(instance):
     except (KeyError, TypeError):
         raise ValidationError(
             'Endpoint get-app-data must return a JSON with the following structure:'
-            ' {"id": "string", "name": "string", "roles": ["string", "string", ...]}'
+            ' {"id": "string", "name": "string", "roles": ["string", "string", ...]}.\n'
+            'Received: '+app_data_response
         )
 
     return instance
