@@ -161,6 +161,7 @@ def update_user_apps(user_json, original_user_json=None):
     user_permissions = user_json['app_metadata']['permissions']
     to_remove_apps = set()
     token = get_token(no_scopes=True)
+    errors = []
 
     if original_user_json:
         old_permissions = original_user_json['app_metadata']['permissions']
@@ -171,17 +172,21 @@ def update_user_apps(user_json, original_user_json=None):
     for app_dict in user_permissions:
         try:
             app = App.objects.get(app_id=app_dict['app'])
-            try:
-                to_remove_apps.remove(app.app_id)
-            except KeyError:
-                pass
             data = {
                 'username': user_json['username'],
                 'email': user_json['email'],
                 'role': app_dict['role'],
                 'user_metadata': user_json['user_metadata']
             }
-            authorized_request('POST', app.endpoint + APP_ENDPOINT_CREATE_USER, payload=data, token=token)
+            try:
+                authorized_request('POST', app.endpoint + APP_ENDPOINT_CREATE_USER, payload=data, token=token)
+            except:
+                errors.append(f'No fue posible actualizar "{app.app_name}": Error HTTP.')
+            try:
+                to_remove_apps.remove(app.app_id)
+            except KeyError:
+                pass
+
         except App.DoesNotExist:
             pass
 
@@ -192,6 +197,7 @@ def update_user_apps(user_json, original_user_json=None):
             authorized_request('POST', app.endpoint + APP_ENDPOINT_DELETE_USER, payload=data, token=token)
         except App.DoesNotExist:
             pass
+    return errors
 
 
 def update_cached_user(user_id, app_metadata, user_metadata):

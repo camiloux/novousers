@@ -96,7 +96,10 @@ class ViewUser(AuthView):
                 update_cached_user(user_id, user_json['app_metadata'], user_json['user_metadata'])
 
                 if status == 200:
-                    update_user_apps(user_json, original_user)
+                    errors = update_user_apps(user_json, original_user)
+                    if errors:
+                        for error in errors:
+                            messages.add_message(request, messages.ERROR, error)
                     messages.add_message(request, messages.SUCCESS, 'Usuario actualizado', extra_tags='alert-success')
                 else:
                     messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}',
