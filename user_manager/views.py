@@ -99,7 +99,7 @@ class ViewUser(AuthView):
                     errors = update_user_apps(user_json, original_user)
                     if errors:
                         for error in errors:
-                            messages.add_message(request, messages.ERROR, error, extra_tags='alert-error')
+                            messages.add_message(request, messages.ERROR, error, extra_tags='alert-danger')
                     messages.add_message(request, messages.SUCCESS, 'Usuario actualizado', extra_tags='alert-success')
                 else:
                     messages.add_message(request, messages.ERROR, f'Ocurrió un error: {response}',
